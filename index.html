@@ -8,6 +8,17 @@
 <title>Transport HQ · Royal Tax</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,700&family=Barlow:wght@400;500;600&display=swap">
 <style>
+/* Startpagina: compacte live-status voor personeel en operaties */
+.hq-start-live-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 18px}
+.hq-live-counts{display:flex;gap:16px;flex-wrap:wrap;padding:10px 0 12px;color:var(--muted,#94a3b8);font-size:13px}
+.hq-live-counts span{display:inline-flex;align-items:center;gap:6px}
+.hq-live-counts b{color:var(--ink);font-size:17px}
+.hq-start-live-grid .hq-presence-dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle}
+.hq-start-live-grid .hq-presence-dot.online{background:#36c98f;box-shadow:0 0 0 3px #36c98f20}
+.hq-start-live-grid .hq-presence-dot.away{background:#e8b64b;box-shadow:0 0 0 3px #e8b64b20}
+.hq-start-live-grid .hq-presence-dot.offline{background:#8792a2}
+@media(max-width:760px){.hq-start-live-grid{grid-template-columns:1fr}.hq-live-counts{gap:12px}}
+
 :root{color-scheme:dark;--bg:#0a0907;--card:#100c2b;--card2:#18124a;--ink:#f1eefc;--mut:#9a93bf;--line:#2a2352;--acc:#9b6dff;--acc2:#6d28d9;--on:#fff;--gold:#f2c94c;--bad:#ff7a7a;--ok:#4cd6a0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Barlow,system-ui,sans-serif}
@@ -45,11 +56,11 @@ h2{font-size:24px;margin:2px 0 10px}
 @media(prefers-reduced-motion:reduce){.cel{animation:none}}
 .bad{color:var(--bad)}.ok{color:var(--ok)}
 nav button{display:flex;align-items:center;gap:7px}nav svg{width:18px;height:18px;flex:none}
-.board{background:#07051a}.bd{display:grid;grid-template-columns:52px 74px 1fr 1fr 74px;gap:8px;padding:9px 4px;border-top:1px solid var(--line);font:600 14px "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}.bd.hd{color:var(--mut);font-size:12px;border-top:0}.bd span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.board{background:#07051a}.bd{display:grid;grid-template-columns:52px 74px 82px minmax(130px,1.4fr) minmax(100px,1fr) 78px 74px;gap:8px;align-items:center;padding:9px 4px;border-top:1px solid var(--line);font:600 14px "Barlow Condensed",sans-serif;letter-spacing:.04em;text-transform:uppercase;color:var(--gold)}.bd.hd{color:var(--mut);font-size:11px;border-top:0}.bd span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bd .bd-duration{font-variant-numeric:tabular-nums;color:var(--ink);letter-spacing:0}.bd .bd-callsign{color:var(--ink)}
 .ld{text-align:center;color:var(--mut);padding:40px;animation:pl 1.4s infinite}@keyframes pl{50%{opacity:.5}}
 body.auth #logo{height:200px;margin:16px auto 4px;display:block}body.auth .brand{justify-content:center}body.auth nav{display:none}body.auth .co{display:none}
 @media(prefers-reduced-motion:reduce){.ld{animation:none}}
-@media(max-width:700px){nav{position:fixed;left:0;right:0;bottom:0;margin:0;background:#0d0a26;border-top:1px solid var(--line);border-bottom:0;z-index:8;padding:0 4px env(safe-area-inset-bottom,0px)}nav button{flex-direction:column;gap:3px;font-size:11px;padding:9px 12px 7px;min-width:70px;border-bottom:0;border-top:3px solid transparent;margin:0}nav button.on{border-top-color:var(--gold)}main{padding-bottom:100px}#toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}.bd{grid-template-columns:46px 66px 1fr 66px}.bd span:nth-child(4){display:none}#logo{height:70px}}
+@media(max-width:700px){nav{position:fixed;left:0;right:0;bottom:0;margin:0;background:#0d0a26;border-top:1px solid var(--line);border-bottom:0;z-index:8;padding:0 4px env(safe-area-inset-bottom,0px)}nav button{flex-direction:column;gap:3px;font-size:11px;padding:9px 12px 7px;min-width:70px;border-bottom:0;border-top:3px solid transparent;margin:0}nav button.on{border-top-color:var(--gold)}main{padding-bottom:100px}#toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}.bd{grid-template-columns:42px 62px 64px minmax(100px,1fr) 68px 60px;gap:5px;font-size:12px}.bd span:nth-child(5){display:none}.bd span:nth-child(7){display:none}#logo{height:70px}}
 .bar i{transition:width .9s cubic-bezier(.2,.7,.2,1)}
 
 /* Airline HQ zakelijke uitbreidingen */
@@ -296,16 +307,7 @@ select{text-overflow:ellipsis}
 @media(max-width:600px){.hq-start-top{padding:19px 17px 8px;flex-direction:column;gap:12px}.hq-start-balance{width:100%}.hq-start-layout{padding:8px 10px 13px}.hq-start-scene{min-height:0}.hq-start-side{grid-template-columns:1fr}.hq-start-stats{grid-template-columns:repeat(2,minmax(0,1fr));padding:0 10px 13px}.hq-start-bottom-grid{grid-template-columns:1fr}.hq-start-stats b{font-size:18px}}
 
 
-/* Startpagina: compacte live-status voor personeel en operaties */
-.hq-start-live-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 18px}
-.hq-live-counts{display:flex;gap:16px;flex-wrap:wrap;padding:10px 0 12px;color:var(--muted,#94a3b8);font-size:13px}
-.hq-live-counts span{display:inline-flex;align-items:center;gap:6px}
-.hq-live-counts b{color:var(--ink);font-size:17px}
-.hq-start-live-grid .hq-presence-dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle}
-.hq-start-live-grid .hq-presence-dot.online{background:#36c98f;box-shadow:0 0 0 3px #36c98f20}
-.hq-start-live-grid .hq-presence-dot.away{background:#e8b64b;box-shadow:0 0 0 3px #e8b64b20}
-.hq-start-live-grid .hq-presence-dot.offline{background:#8792a2}
-@media(max-width:760px){.hq-start-live-grid{grid-template-columns:1fr}.hq-live-counts{gap:12px}}
+
 
 </style></head>
 <body>
@@ -537,7 +539,7 @@ function etsRoutesUI(){const trips=ets().trips||[],unique=new Set(trips.map(t=>S
 const IC={msfsroutes:'M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM8 17h6.5a3.5 3.5 0 0 0 0-7h-5a3.5 3.5 0 0 1 0-7H16',etsroutes:'M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM8 17h6.5a3.5 3.5 0 0 0 0-7h-5a3.5 3.5 0 0 1 0-7H16',hub:'M3 10.5 12 3l9 7.5M5 9v11h14V9M9 20v-6h6v6',vest:'M3 21V5a2 2 0 0 1 2-2h9v18M14 8h5a2 2 0 0 1 2 2v11M7 7h3M7 11h3M7 15h3M17 12h1M17 16h1M2 21h20',etsdash:'M3 12h18M5 12l2-5h10l2 5M6 12v5h2v-2h8v2h2v-5M7 17h10',etsfleet:'M3 7h11v11H3zM14 11h4l3 3v4h-7M7 18a1.5 1.5 0 1 0 0 .01M17 18a1.5 1.5 0 1 0 0 .01',msfsup:'M12 3v18M3 12h18M5 5l14 14M19 5 5 19',etsup:'M3 17l6-6 4 4 8-8M15 7h6v6',bedrijf:'M3 21V7l9-4 9 4v14M8 21v-7h8v7M7 9h.01M12 9h.01M17 9h.01',dash:'M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z',fl:'M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z',news:'M4 4h13v16H6a2 2 0 0 1-2-2zM17 8h3v10a2 2 0 0 1-2 2M8 8h5M8 12h5M8 16h5',fleet:'M3 21V10a9 5 0 0 1 18 0v11M7 21v-6h10v6',up:'M3 17l6-6 4 4 8-8M15 7h6v6',pil:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8',team:'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3',fin:'M3 3v18h18M8 17v-5M13 17V8M18 17v-9',info:'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 16v-4M12 8h.01',adm:'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'};
 const ic=k=>`<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='${IC[k]||''}'/></svg>`;
 function led(k,v,m){m=m||mkey();S.fm=S.fm||{};const o=S.fm[m]=S.fm[m]||{};o[k]=(o[k]||0)+v}
-function board(){const L=S.log.slice(0,8);return `<div class='card board'><h2>Vertrekbord</h2>${L.length?`<div class='bd hd'><span>Tijd</span><span>Vlucht</span><span>Route</span><span>Toestel</span><span>Status</span></div>`+L.map(l=>`<div class='bd'><span>${new Date(l.ts).toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}</span><span>${esc(l.fn||'-')}</span><span>${esc(l.a)} \u2192 ${esc(l.b)}</span><span>${esc(MOD(l.ac||'-'))}</span><span class='ok'>Geland</span></div>`).join(''):`<div class='empty'>Nog geen vluchten. Registreer de eerste bij Vlucht.</div>`}</div>`}
+function board(){const L=(S.log||[]).slice(0,8);return `<div class='card board'><h2>Vertrekbord</h2>${L.length?`<div class='bd hd'><span>Tijd</span><span>Vluchtnr.</span><span>Roepnaam</span><span>Route</span><span>Toestel</span><span>Vliegtijd</span><span>Status</span></div>`+L.map(l=>`<div class='bd'><span>${new Date(l.ts||Date.now()).toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}</span><span>${esc(l.fn||'-')}</span><span class='bd-callsign' title='${esc(cs(l.who||''))}'>${esc(cs(l.who||''))}</span><span>${esc(l.a||'?')} → ${esc(l.b||'?')}</span><span>${esc(MOD(l.ac||'-'))}</span><span class='bd-duration'>${l.durationMs!=null?durationText(Number(l.durationMs)):'—'}</span><span class='ok'>Geland</span></div>`).join(''):`<div class='empty'>Nog geen vluchten. Registreer de eerste bij Vlucht.</div>`}</div>`}
 let lf={t:'',q:''};
 function mine(){const me=ls('who'),L=S.log.filter(l=>l.who==me&&(!lf.t||l.t==lf.t)&&(!lf.q||(l.a+l.b+(l.ac||'')).toUpperCase().includes(lf.q.toUpperCase())));return `<div class='card'><h2>Mijn logboek</h2><div class='f'><div><label>Soort</label><select onchange="lf.t=this.value;render()"><option value=''>Alle</option>${['Passagiers','Cargo','VIP','Training','Overig'].map(t=>`<option ${lf.t==t?'selected':''}>${t}</option>`).join('')}</select></div><div><label>Zoek (luchthaven of toestel)</label><input value="${esc(lf.q)}" onchange="lf.q=this.value;render()"></div><div style='align-self:end'><button class='btn alt' onclick='cpMine()'>Kopieer overzicht</button></div></div>${L.length?L.map(l=>`<div class='row'><div><b>${esc(l.fn||'')} \u00b7 ${esc(l.a)} \u2192 ${esc(l.b)}</b><div class='mut'>${new Date(l.ts).toLocaleDateString('nl-NL')} \u2022 ${esc(l.ac||'')} \u2022 ${l.d} nm${l.t?' \u2022 '+esc(l.t):''}</div></div><div style='text-align:right'><b>${E(l.e)}</b><div class='mut'>omzet ${E(l.g||l.e)} \u2022 +${l.xp} XP</div></div></div>`).join(''):`<div class='empty'>Geen vluchten gevonden. Het logboek toont de laatste 60 vluchten van het bedrijf.</div>`}</div>`}
 async function cpMine(){const me=ls('who'),t=`**${me} \u2013 mijn laatste vluchten**\n`+S.log.filter(l=>l.who==me).slice(0,10).map(l=>`${l.fn||''} ${l.a} \u2192 ${l.b} \u2022 ${l.d} nm \u2022 ${E(l.e)} winst \u2022 ${l.xp} XP`).join('\n');try{await navigator.clipboard.writeText(t);msg('Gekopieerd: plak het in Discord')}catch(e){celebrate('\u2709','Kopieer deze tekst',t,'Selecteer de tekst en kopieer hem')}}
@@ -897,6 +899,22 @@ const RAW={};['addFlight','addExp','buyU','buyAC','maint','sell','freeAC','repAl
 (async()=>{let db=null;try{db=window.claude?await window.claude.use("db"):null}catch(e){}try{const us=await window.claude.use('user');CW=await us.can('data.write')}catch(e){}
 if(db){ref=db.doc("co/main");ref.onSnapshot(s=>{S=s.exists?JSON.parse(JSON.stringify(s.data())):null;if(S)ensureLedgerOpeningBalance();HQ_SYNC.state="ok";HQ_SYNC.last=Date.now();HQ_SYNC.error="";checkNews();if(!(document.activeElement&&/INPUT|SELECT/.test(document.activeElement.tagName)))render()},()=>{HQ_SYNC.state="err";HQ_SYNC.error="Geen verbinding met gedeelde database";updateSyncBar();ref=null;warn('Verbinding met de database mislukt. Controleer je Firebase-gegevens en de regels (zie uitleg). De pagina werkt nu alleen op dit apparaat.');load()})}else load();
 function load(){try{S=JSON.parse(ls("hq"))}catch(e){S=null}if(S)ensureLedgerOpeningBalance();HQ_SYNC.state="local";HQ_SYNC.last=Date.now();HQ_SYNC.error="Er is geen gedeelde databaseverbinding actief.";render()}})();
+</script>
+<script>
+(function(){
+  function removeAccidentalCssText(){
+    var root=document.body;
+    if(!root)return;
+    var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    var nodes=[];
+    while(walker.nextNode()){
+      var node=walker.currentNode;
+      if(node.nodeValue && node.nodeValue.indexOf('/* Startpagina: compacte live-status voor personeel en operaties */')!==-1) nodes.push(node);
+    }
+    nodes.forEach(function(node){node.parentNode&&node.parentNode.removeChild(node);});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',removeAccidentalCssText,{once:true});else removeAccidentalCssText();
+})();
 </script>
 </body>
 </html>
