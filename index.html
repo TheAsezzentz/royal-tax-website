@@ -906,6 +906,12 @@ function rtFleetInspect(mode,index){
  panel.innerHTML=`<h3>${esc(name||'Voertuig')}</h3><p>${road?'Transportgarage · ETS2':'Luchtvaarthangar · MSFS'}</p><div class="rt-inspect-stat"><span>Conditie</span><b>${cond}%</b></div><div class="rt-inspect-stat"><span>Status</span><b>${status}</b></div><div class="rt-inspect-stat"><span>Toewijzing</span><b>${esc(owner||'Niet toegewezen')}</b></div><div class="rt-inspect-stat"><span>Prestaties</span><b>${stats}</b></div><div class="rt-inspect-stat"><span>${road?'Nettoresultaat':'Vlieguren'}</span><b>${road?E(Number(x.revenue)||0):hm(Number(x.hrs)||0)}</b></div><div class="rt-visual-hint">Klik op het voertuig in de scène om het bestaande dossier te openen.</div>`;
  document.querySelectorAll('.rt-visual-slot').forEach((el,i)=>el.classList.toggle('active',i===index));
 }
+// Herstel de bestaande render-aanroep voor beide vlootpagina's.
+// De functie wordt vanuit render() aangeroepen met 'msfs' of 'ets2'.
+function rtFleetExecutiveUI(mode){
+  return rtFleetScene(mode === 'ets2' ? 'ets2' : 'msfs');
+}
+
 function rtFleetScene(mode){
  const road=mode==='ets2',items=road?(ets().trucks||[]):(S.fleet||[]),title=road?'Transportgarage':'Vliegtuighangar',desc=road?'Een isometrische werkplaats voor de volledige ETS2-vloot. Selecteer een vrachtwagen voor details of open het bestaande voertuigpaspoort.':'Een isometrische vliegtuigloods voor de volledige MSFS-vloot. Selecteer een toestel voor details of open het bestaande vliegtuigpaspoort.';
  const cards=items.map((x,i)=>{const cond=Math.round(Number(x.cond??100)),active=road?!!etsActiveTruck(x.id):!!Object.values(S.activeFlights||{}).some(f=>f.ac===x.n),owner=x.claimedBy||'',status=active?(road?'Onderweg':'In vlucht'):owner?'Geclaimd':'Beschikbaar',name=road?x.name:x.n,action=road?`vehicleDossier('ets','${String(x.id).replace(/'/g,"\\'")}')`:`vehicleDossier('msfs',encodeURIComponent('${String(x.n).replace(/'/g,"\\'")}'))`;
