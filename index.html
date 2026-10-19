@@ -153,7 +153,9 @@ label{font-weight:600;font-size:12px;letter-spacing:.025em;color:#b4bfd3;margin-
 @media(max-width:700px){.hq-visual-nav-heading{align-items:stretch;flex-direction:column;padding:15px 15px 8px}.hq-nav-hover-card{max-width:none;min-width:0}.hq-nav-map-shell{margin:0 7px 7px}.hq-nav-map{min-height:210px}.hq-nav-map-label{font-size:11px}.hq-nav-map-sub{font-size:8px}.hq-nav-map-foot{font-size:10px}}
 
 /* ===== Navigatie-upgrade: algemeen menu + duidelijke afdelingsbalk ===== */
-#nav{display:block;overflow:visible;border-bottom:0;margin-top:12px;padding-bottom:10px}
+#nav{display:block;overflow:visible;border-bottom:0;margin-top:12px;padding-bottom:10px;max-width:1200px;margin-left:auto;margin-right:auto}
+#v>.hq-visual-nav{width:100%;max-width:1200px;margin:14px auto 18px}
+#nav .hq-visual-nav{display:none!important}
 #nav .hq-main-nav{display:flex;align-items:center;gap:5px;overflow-x:auto;padding:0 0 9px;border-bottom:1px solid var(--line);scrollbar-width:thin}
 #nav .hq-main-nav button{border:1px solid transparent;border-radius:10px;padding:10px 12px;margin:0;min-height:42px}
 #nav .hq-main-nav button.on{background:linear-gradient(135deg,rgba(124,140,255,.16),rgba(231,189,103,.08));border-color:rgba(231,189,103,.42);color:var(--ink)}
@@ -811,7 +813,7 @@ if(authName){
 const me=ls('who');S.p=S.p||{};Object.keys(S.p).forEach(n=>{if(S.p[n].trips==null)S.p[n].trips=(S.ets?.trips||[]).filter(t=>t.who===n).length;S.p[n].totalActivities=(Number(S.p[n].n)||0)+(Number(S.p[n].trips)||0)});if(tab=='adm'&&!isOwner())tab='hub';navGroup=hqGroupForTab(tab);if(!me||!S.p[me]||S.p[me].pw!==ls('tok')){document.body.className='auth';$('#ttl').textContent='';$('#nav').innerHTML='';v.innerHTML=loginHTML();return}
 if(document.body.className!=='')AN=1;document.body.className='';$('#ttl').innerHTML=esc(me)+ep(pr(S.p[me].xp,preq).L)+'<span>'+(S.p[me].role=='Werknemer'?'Werknemer \u2022 rang '+(S.p[me].rank||1):S.p[me].role)+'</span>';document.title=S.name+" · Transport HQ";
  if(window.__presenceInitFor!==me){window.__presenceInitFor=me;setTimeout(()=>{if(S?.p?.[me]&&presenceState(me)==='offline')setPresence('online',true)},0)}
-$("#nav").innerHTML=`${hqVisualMenu()}<div class="hq-section-nav"><div class="hq-section-brand"><span class="hq-section-mark">${ic(hqMainNav().find(g=>g.id===navGroup)?.icon||'hub')}</span><span>${hqMainNav().find(g=>g.id===navGroup)?.label||'Royal Tax'}</span><small>AFDELINGSMENU</small></div><div class="hq-section-links">${hqSectionNav().map(([k,n])=>`<button class="${k===tab?"on":""}" onclick="setTab('${k}')">${ic(k)}<span>${n}</span></button>`).join("")}</div></div>`;
+$("#nav").innerHTML=`<div class="hq-section-nav"><div class="hq-section-brand"><span class="hq-section-mark">${ic(hqMainNav().find(g=>g.id===navGroup)?.icon||'hub')}</span><span>${hqMainNav().find(g=>g.id===navGroup)?.label||'Royal Tax'}</span><small>AFDELINGSMENU</small></div><div class="hq-section-links">${hqSectionNav().map(([k,n])=>`<button class="${k===tab?"on":""}" onclick="setTab('${k}')">${ic(k)}<span>${n}</span></button>`).join("")}</div></div>`;
 const c=pr(S.xp,req),u=S.u,cap=CAP[u.hangar||0];let h="";
 if(tab=="hub")h=royalTaxDashboardUI();
  if(tab=="ops")h=liveOperationsUI();
@@ -864,7 +866,7 @@ if(tab=="adm")h=`<p class="mut">Pas aan en druk op <b>Alle wijzigingen opslaan</
 <div class="card"><h2>Vluchten verwijderen</h2>${S.log.map((l,i)=>`<div class="row"><div><b>${l.fn?esc(l.fn)+" · ":""}${esc(l.a)} → ${esc(l.b)}</b><div class="mut">${esc(l.who)} • ${E(l.e)} • ${l.xp} XP</div></div><button class="btn alt" onclick="delFl(${i})">Verwijder</button></div>`).join("")||'<div class="empty">Geen vluchten.</div>'}</div>
 <div class="card"><h2>Gevarenzone</h2><button class="btn alt" onclick="S.ach=[];persist();render()">Prestaties resetten</button> <button class="btn alt" style="color:var(--bad);border-color:var(--bad)" onclick="resetAll()">Alles resetten</button></div>`;
 
-v.innerHTML=ro()+`<div id="hq-syncbar" class="hq-syncbar"><span><i class="hq-syncdot"></i><b>Synchronisatiestatus wordt opgehaald…</b></span><span>Laatste update: nog niet beschikbaar</span></div>`+h;updateSyncBar();fx();if(tab==='etsroutes')setTimeout(etsRouteMapInit,60)}
+v.innerHTML=ro()+`<div id="hq-syncbar" class="hq-syncbar"><span><i class="hq-syncdot"></i><b>Synchronisatiestatus wordt opgehaald…</b></span><span>Laatste update: nog niet beschikbaar</span></div>`+hqVisualMenu()+h;updateSyncBar();fx();if(tab==='etsroutes')setTimeout(etsRouteMapInit,60)}
 setInterval(()=>{flightTimerTick();updateLiveClocks()},1000);
 setInterval(()=>{const me=ls('who');if(S?.p?.[me]&&S.p[me].presence?.status!=='offline')setPresence(S.p[me].presence?.status==='away'?'away':'online',true)},60000);
 const navHint=()=>document.querySelectorAll('.hq-main-nav,.hq-section-links').forEach(e=>e.classList.toggle('more',e.scrollWidth>e.clientWidth+e.scrollLeft+6));try{new MutationObserver(navHint).observe(document.getElementById('nav'),{childList:true,subtree:true})}catch(e){}addEventListener('scroll',navHint,true);addEventListener('resize',navHint);
