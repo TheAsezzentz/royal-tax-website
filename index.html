@@ -44,6 +44,33 @@ body::before{content:"";position:fixed;inset:-25%;z-index:0;pointer-events:none;
 }
 #rt-prog{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,#3b82f6,#ff8a1f);pointer-events:none}
 </style>
+<script>
+/* LITE: gebundelde render (max 1x per 600ms, niet in achtergrondtab) */
+(function(){var t=null,pending=false,last=0;
+function doRender(){t=null;pending=false;last=Date.now();
+ if(document.activeElement&&/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))return;
+ window.__rtSnap=1;document.body.classList.add("rt-still");
+ try{render()}finally{window.__rtSnap=0;requestAnimationFrame(function(){requestAnimationFrame(function(){document.body.classList.remove("rt-still")})})}}
+window.rtQueueRender=function(){if(document.hidden){pending=true;return}
+ if(t)return;var wait=Math.max(50,600-(Date.now()-last));t=setTimeout(doRender,wait)};
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&pending)rtQueueRender()});
+})();
+</script>
+<style id="rt-perf">
+/* LITE: geen eindeloze animaties, geen blur, geen vaste blend-lagen */
+body::before{display:none!important}
+body{background-attachment:scroll!important}
+*,*::before,*::after{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.rt-hero-bg{animation:none!important;will-change:auto!important;inset:0!important}
+.rt-hero-fx,.rt-hero::after,.rt-fly,.rt-drive,.rt-road2,.rt-streak,.rt-sun{display:none!important}
+.rt-kpi::after,.stat::after,.bar i::after,.card::before,.card::after,.rt-panel::before,.rt-kpi::before,.btn::before{display:none!important}
+.btn:not(.alt):not(:disabled),.card.pass,.big,.rt-hero h1 em{animation:none!important}
+.rt-hero h1 em{-webkit-text-fill-color:currentColor!important;background:none!important;color:var(--orange)!important}
+.rt-brand svg,.rt-kpi-ico,.rt-op-img svg,.rt-st.live .rt-st-tag,.rt-tile .go,.rt-chip::before,.rt-st.online .rt-st-body span i,.rt-tl li .d,.rt-mk,.rt-mk.road,.rt-hubmk,.rt-panel-h h2 .dot,.rt-visual-slot.is-busy,.rt-cafe-seat.is-online .rt-person-avatar,.pill.live,.hq-start-live-grid .hq-presence-dot.online,.rt-op.road .rt-op-prog.indet i{animation:none!important}
+.rt-op.road .rt-op-prog.indet i{width:100%!important}
+.rt-badge{animation:rtPop .5s var(--ease) both!important}
+.rt-kpi-body b,.stat b{will-change:auto!important}
+</style>
 </head>
 <body>
 <a class="rt-skip" href="#v">Naar de inhoud</a>
@@ -1146,14 +1173,14 @@ if(tab=="adm")h=`<p class="mut">Pas aan en druk op <b>Alle wijzigingen opslaan</
 
 {const __s=tab+"|"+ro()+h;let __k=5381;for(let i=0;i<__s.length;i++)__k=((__k<<5)+__k+__s.charCodeAt(i))|0;__k=String(__k);if(window.__rtSnap&&v.dataset.rtSig===__k&&document.getElementById("hq-syncbar")){updateSyncBar();return}v.dataset.rtSig=__k}
 v.innerHTML=ro()+`<div id="hq-syncbar" class="hq-syncbar"><span><i class="hq-syncdot"></i><b>Synchronisatiestatus wordt opgehaald…</b></span><span>Laatste update: nog niet beschikbaar</span></div>`+h;updateSyncBar();fx();rtMarkNew();rtAfterRender();if(tab==='etsroutes')setTimeout(etsRouteMapInit,60);if(tab==='hub')rtDashAfterRender()}
-setInterval(()=>{try{flightTimerTick()}catch(e){}try{updateLiveClocks()}catch(e){}},1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden){try{flightTimerTick()}catch(e){}try{updateLiveClocks()}catch(e){}}});setInterval(()=>{if(Object.values(S?.activeFlights||{}).some(f=>f&&Number(f.deadlineAt)>0&&Date.now()>=Number(f.deadlineAt)))checkExpiredFlights()},15000);
+setInterval(()=>{if(document.hidden)return;try{flightTimerTick()}catch(e){}try{updateLiveClocks()}catch(e){}},1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden){try{flightTimerTick()}catch(e){}try{updateLiveClocks()}catch(e){}}});setInterval(()=>{if(Object.values(S?.activeFlights||{}).some(f=>f&&Number(f.deadlineAt)>0&&Date.now()>=Number(f.deadlineAt)))checkExpiredFlights()},15000);
 setInterval(()=>{const me=ls('who');if(S?.p?.[me]&&S.p[me].presence?.status!=='offline')setPresence(S.p[me].presence?.status==='away'?'away':'online',true)},60000);
 const navHint=()=>document.querySelectorAll('.hq-main-nav,.hq-section-links').forEach(e=>e.classList.toggle('more',e.scrollWidth>e.clientWidth+e.scrollLeft+6));try{new MutationObserver(navHint).observe(document.getElementById('nav'),{childList:true,subtree:true})}catch(e){}addEventListener('scroll',navHint,true);addEventListener('resize',navHint);
 let CW=null;const HID=Math.random().toString(36).slice(2);const ro=()=>CW===false?"<div class='card' style='border-color:var(--bad);max-width:460px;margin:12px auto'><b class='bad'>Je hebt alleen leesrechten</b><p class='mut'>Je kunt de pagina bekijken, maar geen account aanmaken en niets opslaan. Vraag de eigenaar om je in het deelmenu per e-mail als Editor uit te nodigen. Dat werkt alleen als de pagina niet ook via een openbare link is gedeeld.</p></div>":"";
 let Q=Promise.resolve();const safe=(f,g)=>function(...a){const ev=a[0];if(ev&&ev.preventDefault)ev.preventDefault();if(g&&CW===false&&ref)return msg('Je hebt alleen leesrechten, dus er wordt niets opgeslagen. Vraag de eigenaar om je per e-mail als Editor uit te nodigen.');const self=this,run=async()=>{await LW;if(!ref){return f.apply(self,a)}for(let i=0;i<12;i++){let r;try{r=await ref.acquire({holder:HID,ttlMs:1500})}catch(e){const x=f.apply(self,a);await LW;return x}if(r.acquired){try{const s=await ref.get();if(s.exists)S=JSON.parse(JSON.stringify(s.data()))}catch(e){}const x=f.apply(self,a);await LW;return x}await new Promise(r=>setTimeout(r,400))}msg('Het bedrijf wordt net door iemand anders bijgewerkt. Probeer het zo nog eens.')},p=Q.then(run,run);Q=p.catch(()=>{});return p};
 const RAW={};['addFlight','checkExpiredFlights','addExp','buyU','buyAC','maint','sell','freeAC','repAll','delFl','delAC','admSave','pay','prom','rpw','delP','saveProf','setF','login','register','propose','approve','etsClaim','etsRelease','etsBuy','etsSell','etsStart','etsFinish','etsUpgrade','etsMaintain','buyBranch','sendChat','abandonFlight','crashFlight','setPresence'].forEach(n=>{RAW[n]=window[n];window[n]=safe(window[n],n!='login')});
 (async()=>{let db=null;try{db=window.claude?await window.claude.use("db"):null}catch(e){}try{const us=await window.claude.use('user');CW=await us.can('data.write')}catch(e){}
-if(db){ref=db.doc("co/main");ref.onSnapshot(s=>{S=s.exists?JSON.parse(JSON.stringify(s.data())):null;if(S)ensureLedgerOpeningBalance();HQ_SYNC.state="ok";HQ_SYNC.last=Date.now();HQ_SYNC.error="";checkNews();if(!(document.activeElement&&/INPUT|SELECT/.test(document.activeElement.tagName))){window.__rtSnap=1;document.body.classList.add("rt-still");try{render()}finally{window.__rtSnap=0;requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.remove("rt-still")))}}},()=>{HQ_SYNC.state="err";HQ_SYNC.error="Geen verbinding met gedeelde database";updateSyncBar();ref=null;warn('Verbinding met de database mislukt. Controleer je Firebase-gegevens en de regels (zie uitleg). De pagina werkt nu alleen op dit apparaat.');load()})}else load();
+if(db){ref=db.doc("co/main");ref.onSnapshot(s=>{S=s.exists?JSON.parse(JSON.stringify(s.data())):null;if(S)ensureLedgerOpeningBalance();HQ_SYNC.state="ok";HQ_SYNC.last=Date.now();HQ_SYNC.error="";checkNews();rtQueueRender();},()=>{HQ_SYNC.state="err";HQ_SYNC.error="Geen verbinding met gedeelde database";updateSyncBar();ref=null;warn('Verbinding met de database mislukt. Controleer je Firebase-gegevens en de regels (zie uitleg). De pagina werkt nu alleen op dit apparaat.');load()})}else load();
 function load(){try{S=JSON.parse(ls("hq"))}catch(e){S=null}if(S)ensureLedgerOpeningBalance();HQ_SYNC.state="local";HQ_SYNC.last=Date.now();HQ_SYNC.error="Er is geen gedeelde databaseverbinding actief.";render()}})();
 
 </script>
