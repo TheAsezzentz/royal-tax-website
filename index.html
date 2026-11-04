@@ -77,16 +77,56 @@ body::before{content:"";position:fixed;inset:-25%;z-index:0;pointer-events:none;
 #rt-prog{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,#3b82f6,#ff8a1f);pointer-events:none}
 </style>
 <script>
-/* LITE: gebundelde render (max 1x per 600ms, niet in achtergrondtab) */
+/* LITE+: gebundelde, niet-destructieve Firebase-render */
 (function(){var t=null,pending=false,last=0;
-function doRender(){t=null;pending=false;last=Date.now();
- if(document.activeElement&&/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))return;
- window.__rtSnap=1;document.body.classList.add("rt-still");
- try{render()}finally{window.__rtSnap=0;requestAnimationFrame(function(){requestAnimationFrame(function(){document.body.classList.remove("rt-still")})})}}
-window.rtQueueRender=function(){if(document.hidden){pending=true;return}
- if(t)return;var wait=Math.max(50,600-(Date.now()-last));t=setTimeout(doRender,wait)};
+function hasFocusedEditor(){var a=document.activeElement;return !!(a&&/INPUT|SELECT|TEXTAREA/.test(a.tagName))}
+function doRender(){t=null;last=Date.now();if(hasFocusedEditor()){pending=true;return}
+ pending=false;window.__rtSnap=1;document.body.classList.add("rt-still");
+ try{render()}finally{window.__rtSnap=0;requestAnimationFrame(function(){document.body.classList.remove("rt-still")})}}
+window.rtQueueRender=function(){if(document.hidden){pending=true;return}if(t)return;var wait=Math.max(80,450-(Date.now()-last));t=setTimeout(doRender,wait)};
+document.addEventListener("focusout",function(){if(pending)setTimeout(function(){if(!hasFocusedEditor())rtQueueRender()},80)},true);
 document.addEventListener("visibilitychange",function(){if(!document.hidden&&pending)rtQueueRender()});
 })();
+/* Reconcile markup in place: behoud bestaande DOM-nodes, focus, invoer en scrollpositie. */
+function rtPatchHTML(root,html){
+ const template=document.createElement('template');template.innerHTML=html;
+ const syncAttrs=(oldEl,newEl)=>{
+  for(const a of [...oldEl.attributes])if(!newEl.hasAttribute(a.name))oldEl.removeAttribute(a.name);
+  for(const a of [...newEl.attributes])if(oldEl.getAttribute(a.name)!==a.value)oldEl.setAttribute(a.name,a.value);
+  if(oldEl.tagName==='INPUT'){
+   const focused=oldEl===document.activeElement;
+   if(!focused&&oldEl.type!=='file'&&oldEl.value!==newEl.value)oldEl.value=newEl.value;
+   if(oldEl.type==='checkbox'||oldEl.type==='radio')oldEl.checked=newEl.checked;
+  }else if(oldEl.tagName==='TEXTAREA'){
+   if(oldEl!==document.activeElement&&oldEl.value!==newEl.value)oldEl.value=newEl.value;
+  }else if(oldEl.tagName==='SELECT'){
+   if(oldEl!==document.activeElement)oldEl.value=newEl.value;
+  }
+ };
+ const patch=(oldNode,newNode)=>{
+  if(!oldNode||!newNode||oldNode.nodeType!==newNode.nodeType||
+    (oldNode.nodeType===1&&oldNode.tagName!==newNode.tagName)){
+    const fresh=newNode.cloneNode(true);if(oldNode)oldNode.replaceWith(fresh);return fresh;
+  }
+  if(oldNode.nodeType===3||oldNode.nodeType===8){if(oldNode.nodeValue!==newNode.nodeValue)oldNode.nodeValue=newNode.nodeValue;return oldNode;}
+  if(oldNode.nodeType!==1)return oldNode;
+  if(oldNode.id==='ets-road-map'||oldNode.id==='rt-live-map')return oldNode;
+  if(oldNode.tagName==='INPUT'||oldNode.tagName==='TEXTAREA'||oldNode.tagName==='SELECT')syncAttrs(oldNode,newNode);
+  else syncAttrs(oldNode,newNode);
+  const oldChildren=[...oldNode.childNodes],newChildren=[...newNode.childNodes];
+  for(let i=0;i<newChildren.length;i++){
+   const current=oldNode.childNodes[i];
+   if(current)patch(current,newChildren[i]);else oldNode.appendChild(newChildren[i].cloneNode(true));
+  }
+  while(oldNode.childNodes.length>newChildren.length){const tail=oldNode.lastChild;if(oldNode.id==='rt-map-slot'&&tail&&tail.id==='rt-live-map')break;oldNode.removeChild(tail)}
+  if(oldNode.tagName==='TEXTAREA'&&oldNode!==document.activeElement&&oldNode.value!==newNode.value)oldNode.value=newNode.value;
+  if(oldNode.tagName==='SELECT'&&oldNode!==document.activeElement)oldNode.value=newNode.value;
+  return oldNode;
+ };
+ const oldChildren=[...root.childNodes],newChildren=[...template.content.childNodes];
+ for(let i=0;i<newChildren.length;i++){const current=root.childNodes[i];if(current)patch(current,newChildren[i]);else root.appendChild(newChildren[i].cloneNode(true));}
+ while(root.childNodes.length>newChildren.length)root.removeChild(root.lastChild);
+}
 </script>
 <style id="rt-perf">
 /* LITE: geen eindeloze animaties, geen blur, geen vaste blend-lagen */
@@ -622,7 +662,7 @@ function rtChartsHTML(d){
 /* ---------- paginakop met kruimelpad ---------- */
 function rtAfterRender(){
   const v=document.getElementById('v');if(!v||document.body.classList.contains('auth')||!S)return;
-  const old=v.querySelector(':scope>.rt-page-head');if(old)old.remove();
+  const old=v.querySelector(':scope>.rt-page-head');if(old&&old.dataset.tab===tab)return;if(old)old.remove();
   if(tab==='hub')return;
   let grp=null,label=null;
   for(const m of rtNavModel()){
@@ -630,7 +670,7 @@ function rtAfterRender(){
     if(m.items){const it=m.items.find(x=>x[0]===tab);if(it){grp=m.label;label=it[1]}}
   }
   if(!label)label=({info:'Handleiding',adm:'Beheer'})[tab]||tab;
-  const h=document.createElement('div');h.className='rt-page-head';
+  const h=document.createElement('div');h.className='rt-page-head';h.dataset.tab=tab;
   h.innerHTML=`<nav class="rt-crumb" aria-label="Kruimelpad"><button type="button" onclick="rtGo('hub')">Dashboard</button>${grp?`<span>›</span><span>${esc(grp)}</span>`:''}<span>›</span><b>${esc(label)}</b></nav><h1>${esc(label)}</h1>`;
   v.insertBefore(h,v.firstChild);
 }
@@ -1092,7 +1132,7 @@ function rtUpdateHeroLive(){
 
 function setPresence(status,silent=false){const me=ls('who');if(!S?.p?.[me])return;S.p[me].presence={status:status,lastSeen:Date.now()};if(status!=='offline')S.p[me].presence.lastSeen=Date.now();persist();updateSyncBar();if(!silent){msg('Je status is aangepast naar '+presenceLabel(status)+'.');render()}}
 function presenceUI(){const me=ls('who'),my=S.p?.[me]?.presence?.status||'online';return `<div class="card"><h2>Medewerkersstatus</h2><p class="section-intro">Kies je eigen status. Een medewerker zonder recente hartslag wordt automatisch als offline getoond.</p><div class="f"><div><label>Mijn status</label><select onchange="setPresence(this.value)"><option value="online" ${my==='online'?'selected':''}>🟢 Online</option><option value="away" ${my==='away'?'selected':''}>🟡 Afwezig</option><option value="offline" ${my==='offline'?'selected':''}>⚫ Offline</option></select></div></div><div class="hq-presence-list" style="margin-top:12px">${Object.entries(S.p||{}).map(([n,p])=>{const st=presenceState(n),seen=p.presence?.lastSeen;return `<div class="hq-presence-card"><div class="hq-presence-head"><span class="hq-presence-dot ${st}"></span><b>${esc(n)}</b><span class="pill">${presenceLabel(st)}</span></div><div class="mut" style="margin-top:7px">${esc(p.role||'Werknemer')} · ${seen?'Laatst actief: '+new Date(seen).toLocaleString('nl-NL'):'Nog geen status ontvangen'}</div></div>`}).join('')}</div></div>`}
-function updateSyncBar(){const el=document.getElementById('hq-syncbar');if(!el)return;const st=HQ_SYNC.state,label=st==='ok'?'Firebase gesynchroniseerd':st==='pending'?'Synchroniseren…':st==='err'?'Synchronisatiefout':st==='local'?'Alleen lokaal opgeslagen':'Verbinden…';el.innerHTML=`<span><i class="hq-syncdot ${st==='ok'?'ok':st==='err'?'err':''}"></i><b>${label}</b>${HQ_SYNC.error?' · '+esc(HQ_SYNC.error):''}</span><span>Laatste update: ${HQ_SYNC.last?new Date(HQ_SYNC.last).toLocaleString('nl-NL'):'nog niet beschikbaar'}</span>`}
+function updateSyncBar(){const el=document.getElementById('hq-syncbar');if(!el)return;const st=HQ_SYNC.state,label=st==='ok'?'Firebase gesynchroniseerd':st==='pending'?'Synchroniseren…':st==='err'?'Synchronisatiefout':st==='local'?'Alleen lokaal opgeslagen':'Verbinden…';let left=el.querySelector(':scope > span:first-child'),right=el.querySelector(':scope > span:last-child');if(!left){left=document.createElement('span');right=document.createElement('span');el.replaceChildren(left,right)}let dot=left.querySelector('.hq-syncdot'),bold=left.querySelector('b');if(!dot){dot=document.createElement('i');dot.className='hq-syncdot';bold=document.createElement('b');left.replaceChildren(dot,bold)}dot.className='hq-syncdot '+(st==='ok'?'ok':st==='err'?'err':'');bold.textContent=label;const err=HQ_SYNC.error?' · '+HQ_SYNC.error:'';left.dataset.error=err;left.title=err;right.textContent='Laatste update: '+(HQ_SYNC.last?new Date(HQ_SYNC.last).toLocaleString('nl-NL'):'nog niet beschikbaar')}
 const HQ_WIDGETS=[['balance','Bedrijfskas'],['flights','MSFS-vluchten'],['trips','ETS2-ritten'],['active','Actieve operaties'],['employees','Medewerkers'],['incidents','Incidenten'],['revenue','Gezamenlijke omzet']];
 function widgetPrefs(){try{const a=JSON.parse(ls('hq_widgets_'+(ls('who')||'guest'))||'null');return Array.isArray(a)?a:HQ_WIDGETS.map(x=>x[0])}catch(_){return HQ_WIDGETS.map(x=>x[0])}}
 function setWidget(key,on){let a=widgetPrefs();a=on?[...new Set([...a,key])]:a.filter(x=>x!==key);ls('hq_widgets_'+(ls('who')||'guest'),JSON.stringify(a));render()}
@@ -1281,7 +1321,7 @@ if(tab=="adm")h=`<p class="mut">Pas aan en druk op <b>Alle wijzigingen opslaan</
 ${adminActivityManagerUI()}<div class="card"><h2>Gevarenzone</h2><button class="btn alt" onclick="S.ach=[];persist();render()">Prestaties resetten</button> <button class="btn alt" style="color:var(--bad);border-color:var(--bad)" onclick="resetAll()">Alles resetten</button></div>`;
 
 {const __s=tab+"|"+ro()+h;let __k=5381;for(let i=0;i<__s.length;i++)__k=((__k<<5)+__k+__s.charCodeAt(i))|0;__k=String(__k);if(window.__rtSnap&&v.dataset.rtSig===__k&&document.getElementById("hq-syncbar")){updateSyncBar();return}v.dataset.rtSig=__k}
-v.innerHTML=ro()+`<div id="hq-syncbar" class="hq-syncbar"><span><i class="hq-syncdot"></i><b>Synchronisatiestatus wordt opgehaald…</b></span><span>Laatste update: nog niet beschikbaar</span></div>`+h;updateSyncBar();fx();rtMarkNew();rtAfterRender();if(tab==='etsroutes')setTimeout(etsRouteMapInit,60);if(tab==='hub')rtDashAfterRender()}
+rtPatchHTML(v,ro()+`<div id="hq-syncbar" class="hq-syncbar"><span><i class="hq-syncdot"></i><b>Synchronisatiestatus wordt opgehaald…</b></span><span>Laatste update: nog niet beschikbaar</span></div>`+h);updateSyncBar();if(!window.__rtSnap)fx();rtMarkNew();rtAfterRender();if(tab==='etsroutes')setTimeout(etsRouteMapInit,60);if(tab==='hub')rtDashAfterRender()}
 setInterval(()=>{if(document.hidden)return;try{flightTimerTick()}catch(e){}try{checkActivityReminders()}catch(e){}try{updateLiveClocks()}catch(e){}},1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden){try{flightTimerTick()}catch(e){}try{checkActivityReminders()}catch(e){}try{updateLiveClocks()}catch(e){}}});setInterval(()=>{if(Object.values(S?.activeFlights||{}).some(f=>f&&Number(f.deadlineAt)>0&&Date.now()>=Number(f.deadlineAt)))checkExpiredFlights()},15000);
 setInterval(()=>{const me=ls('who');if(S?.p?.[me]&&S.p[me].presence?.status!=='offline')setPresence(S.p[me].presence?.status==='away'?'away':'online',true)},60000);
 const navHint=()=>document.querySelectorAll('.hq-main-nav,.hq-section-links').forEach(e=>e.classList.toggle('more',e.scrollWidth>e.clientWidth+e.scrollLeft+6));try{new MutationObserver(navHint).observe(document.getElementById('nav'),{childList:true,subtree:true})}catch(e){}addEventListener('scroll',navHint,true);addEventListener('resize',navHint);
