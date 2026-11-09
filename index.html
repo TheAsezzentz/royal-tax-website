@@ -143,11 +143,263 @@ body{background-attachment:scroll!important}
 .rt-badge{animation:rtPop .5s var(--ease) both!important}
 .rt-kpi-body b,.stat b{will-change:auto!important}
 </style>
+<style id="rt-v5">
+/* ===== Royal Tax UI v5: glazen panelen over de hoofdkantoor-foto ===== */
+:root{--g-bg:linear-gradient(180deg,rgba(15,25,43,.80),rgba(8,14,26,.86));--g-line:rgba(148,180,230,.15);--g-blue:#2f6bff;--g-orange:#ff8a1f;--g-green:#34d399}
+#v{position:relative;z-index:1}
+body:has(.rt5) .hq-syncbar{text-shadow:0 1px 6px rgba(0,0,0,.9)}
+
+/* --- achtergrondfoto (alleen op de hoofdpagina) --- */
+.rt5-photo{display:none}
+body:has(.rt5) .rt5-photo{display:block;position:absolute;top:0;left:0;width:100%;height:clamp(440px,35.5vw,720px);z-index:0;pointer-events:none;
+ background:
+  linear-gradient(180deg,rgba(4,9,18,.65) 0,rgba(4,9,18,.08) 18%,rgba(4,9,18,.05) 55%,rgba(5,11,22,.8) 86%,#050b16 100%),
+  url("hero.png") center top/cover no-repeat,
+  radial-gradient(60% 50% at 50% 78%,rgba(255,138,31,.45),transparent 70%),
+  linear-gradient(180deg,#0a1630 0,#1b2b52 45%,#5a3a52 72%,#0b1220 100%)}
+
+/* --- header --- */
+/* geen dikke headerbalk: logo, menubalk en knoppen zweven los bovenaan en scrollen mee */
+.rt-top,html[data-theme=light] .rt-top{position:relative!important;gap:18px;height:auto!important;min-height:var(--top-h);padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;padding-bottom:4px;background:none!important;border-bottom:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.rt-top-sep{display:none!important}
+.rt-brand-word{text-shadow:0 2px 10px rgba(0,0,0,.6)}
+body.rt-menu-open .rt-top{position:fixed!important;top:0;left:0;right:0;z-index:60;padding-bottom:10px;background:#07101d!important}
+.rt-brand svg{width:46px;height:38px}
+.rt-brand-word b{font-size:22px;letter-spacing:.05em}
+.rt-brand-word small{letter-spacing:.16em;font-size:9.5px;color:#c8d4e6}
+#ttl{display:flex;align-items:center;gap:10px;flex:none}
+.rt5-bell{position:relative;flex:none;width:42px;height:42px;display:grid;place-items:center;border-radius:12px;border:1px solid var(--g-line);background:rgba(10,18,32,.65);color:#dbe6f5;cursor:pointer;transition:border-color .2s,background .2s}
+.rt5-bell:hover{border-color:#4f9cff88;background:rgba(20,34,60,.8)}
+.rt5-bell svg{width:20px;height:20px}
+.rt5-bell em{position:absolute;top:-6px;right:-6px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:#ef4444;color:#fff;font:700 10.5px/19px var(--font);font-style:normal;text-align:center;box-shadow:0 0 0 2px #070d18}
+.rt-usr-btn{border:1px solid var(--g-line)!important;background:rgba(10,18,32,.65)!important;padding:4px 10px 4px 4px}
+.rt-usr-txt small{display:block;font-size:11.5px;color:#9fb0c8;line-height:1.2}
+.rt-usr-txt b{font-size:14px}
+.rt-sub .rt5-logout-item{color:#ffb4b4}
+@media(min-width:1281px){
+ #nav{flex:1;display:flex;justify-content:center;min-width:0}
+ .rt-top-sep{display:none}
+ .rt-menu{padding:5px;gap:2px;border:1px solid var(--g-line);border-radius:14px;background:rgba(10,18,32,.70);-webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+ .rt-link{min-height:40px;padding:0 11px;border-radius:10px;font-size:13px;color:#c9d5e8}
+ .rt-link>svg{width:16px!important;height:16px!important}
+ .rt-link::after{display:none!important}
+ .rt-link.on{color:#fff;background:linear-gradient(180deg,#3a78ff,#1d4ed8);box-shadow:0 4px 16px rgba(47,107,255,.45),inset 0 1px 0 rgba(255,255,255,.25)}
+ .rt-link.on svg{color:#fff}
+ .rt-search{width:42px;height:42px;padding:0!important;justify-content:center;border-radius:12px;flex:none}
+ .rt-search span,.rt-search kbd{display:none!important}
+}
+@media(min-width:1281px){.rt-link>svg:not(.rt-chev){display:inline-block!important}}
+@media(min-width:1600px){.rt-usr-txt{display:flex!important;flex-direction:column}}
+@media(min-width:1281px){.rt-link .rt-chev{display:none!important}.rt-link{gap:7px!important}}
+@media(min-width:1281px) and (max-width:1440px){.rt-link{padding:0 8px!important;font-size:12.5px!important}.rt-link>svg{display:none!important}.rt-brand-word b{font-size:19px}}
+
+/* --- kaarten --- */
+.rt5{display:block}
+.rt5-card,.rt5 .rt-panel{min-width:0;padding:16px;border:1px solid var(--g-line);border-radius:14px;background:var(--g-bg);box-shadow:0 12px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05);color:#e8eef8}
+.rt5-card{-webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important}
+.rt5-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 12px;flex-wrap:nowrap;min-width:0}
+.rt5-h h3{display:flex;align-items:center;gap:8px;min-width:0;margin:0;font:700 14.5px/1.25 var(--font);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt5-mapcard .rt5-h{flex-wrap:wrap}
+.rt5-map .leaflet-tooltip{font-size:11px;padding:4px 7px}
+.rt5-h h3 svg{width:17px;height:17px;color:#5aa7ff;flex:none}
+.rt5-more{flex:none;display:inline-flex;align-items:center;gap:5px;padding:4px 2px;border:0;background:none;color:#c3cfe2;font:600 12.5px/1 var(--font);cursor:pointer;white-space:nowrap}
+.rt5-more:hover{color:var(--g-orange)}
+.rt5-dot{width:9px;height:9px;border-radius:50%;background:var(--g-orange);box-shadow:0 0 0 4px rgba(255,138,31,.18);flex:none}
+.rt5-dot.g{background:var(--g-green);box-shadow:0 0 0 4px rgba(52,211,153,.18)}
+.rt5 .mut{color:#9fb0c8}
+.rt5-empty{display:grid;justify-items:center;gap:6px;text-align:center;padding:18px 8px;color:#9fb0c8;font-size:13px}
+.rt5-empty>svg{width:30px;height:30px;color:#5aa7ff;opacity:.8}
+.rt5-empty b{color:#fff;font-size:14px}
+.rt5-empty.sm{padding:10px 4px}
+.rt5-empty-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+
+/* --- podium: live ops, kas, KPI's --- */
+.rt5-stage{display:grid;grid-template-columns:minmax(270px,330px) minmax(0,1fr) minmax(260px,320px);grid-template-rows:minmax(clamp(250px,calc(25vw - 100px),410px),auto) auto;gap:16px;align-items:start}
+.rt5-live{grid-column:1;grid-row:1/3}
+.rt5-kas{grid-column:3;grid-row:1}
+.rt5-kpis{grid-column:2/4;grid-row:2;align-self:end;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.rt5-op{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:11px;align-items:center;padding:11px 0;border-top:1px solid rgba(255,255,255,.07)}
+.rt5-op:first-child{border-top:0;padding-top:2px}
+.rt5-op-ico{width:42px;height:42px;display:grid;place-items:center;border-radius:11px;background:rgba(47,107,255,.14);color:#cfe0ff}
+.rt5-op-ico.road{background:rgba(255,138,31,.13);color:#ffd2a6}
+.rt5-op-ico svg{width:24px;height:24px}
+.rt5-op-main{min-width:0;display:grid;gap:2px}
+.rt5-op-main b{font-size:14px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt5-op-main>span{font-size:12px;color:#b8c6da;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt5-op-side{display:grid;gap:3px;text-align:right;font-size:11.5px;color:#d5deeb;white-space:nowrap}
+.rt5-op-side small{font-size:11.5px}
+.rt5-op-side .mut{max-width:110px;overflow:hidden;text-overflow:ellipsis}
+.rt5-op-more{padding-top:8px;font-size:12px;color:#9fb0c8;text-align:center}
+.rt5-chip{justify-self:start;margin-top:3px;padding:2px 9px;border-radius:999px;font:700 10.5px/1.6 var(--font);font-style:normal;background:rgba(52,211,153,.14);color:#4ade80;border:1px solid rgba(52,211,153,.28)}
+.rt5-chip.info{background:rgba(47,107,255,.16);color:#8fb8ff;border-color:rgba(79,156,255,.35)}
+.rt5-chip.warn{background:rgba(255,138,31,.16);color:#ffb36b;border-color:rgba(255,138,31,.35)}
+.rt5-kas-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rt5-kas-row b{font:800 clamp(28px,2.6vw,36px)/1.1 var(--font);color:#fff;letter-spacing:-.01em}
+.rt5-kas .rt5-h h3{color:#ffc27d}
+.rt5-kas .rt5-h h3 svg{color:var(--g-green)}
+.rt5-delta{padding:3px 9px;border-radius:999px;font:700 12px/1.5 var(--font)}
+.rt5-delta.up{background:rgba(52,211,153,.15);color:#4ade80}
+.rt5-delta.down{background:rgba(255,107,122,.15);color:#ff8a96}
+.rt5-spark{display:block;width:100%;height:70px;margin-top:10px}
+.rt5-spark-empty{margin-top:12px;font-size:12px;color:#9fb0c8}
+.rt5-kpi{position:relative;overflow:hidden;display:flex;align-items:center;gap:12px;min-width:0;padding:14px 16px;border:1px solid var(--g-line);border-radius:14px;background:var(--g-bg);color:#fff;text-align:left;font:inherit;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(12px)!important;backdrop-filter:blur(12px)!important;transition:border-color .2s,transform .2s}
+.rt5-kpi:hover{border-color:#4f9cff77;transform:translateY(-2px)}
+.rt5-kpi-ico{flex:none;width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:rgba(47,107,255,.15);color:#8fb8ff}
+.rt5-kpi-ico svg{width:22px;height:22px}
+.rt5-kpi-body{display:grid;min-width:0}
+.rt5-kpi-body span{font-size:12.5px;color:#c3cfe2}
+.rt5-kpi-body b{font:800 28px/1.15 var(--font)}
+.rt5-kpi-body small{font-size:11.5px;color:#9fb0c8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt5-kpi-deco{position:absolute;right:-8px;bottom:-14px;color:#fff;opacity:.06;pointer-events:none}
+.rt5-kpi-deco svg{width:84px;height:84px}
+
+/* --- rijen --- */
+.rt5-row{display:grid;gap:16px;margin-top:16px;grid-template-columns:minmax(250px,300px) minmax(0,1.8fr) minmax(220px,1fr) minmax(210px,240px);grid-template-areas:"ev map st qk"}
+.rt5-events{grid-area:ev}.rt5-mapcard{grid-area:map}.rt5-status{grid-area:st}.rt5-quick{grid-area:qk}
+.rt5-row.b{grid-template-columns:minmax(0,1.15fr) minmax(0,1.75fr) minmax(220px,.85fr) minmax(190px,220px);grid-template-areas:"pr dv tp wx"}
+.rt5-promo{grid-area:pr}.rt5-divs{grid-area:dv}.rt5-topcard{grid-area:tp}.rt5-wx{grid-area:wx}
+
+.rt5-ev{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.rt5-ev li{display:flex;gap:11px;align-items:flex-start;min-width:0}
+.rt5-ev-ico{flex:none;width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:rgba(47,107,255,.13);color:#8fb8ff}
+.rt5-ev-ico svg{width:16px;height:16px}
+.rt5-ev-ico.k-ets{background:rgba(255,255,255,.07);color:#e6edf7}
+.rt5-ev-ico.k-lv,.rt5-ev-ico.k-pr,.rt5-ev-ico.k-bon,.rt5-ev-ico.k-etsach{background:rgba(255,194,77,.13);color:#ffc24d}
+.rt5-ev-ico.k-join,.rt5-ev-ico.k-chat{background:rgba(52,211,153,.12);color:#6ee7b7}
+.rt5-ev li>div{min-width:0;display:grid}
+.rt5-ev b{font-size:13px;font-weight:600;color:#eef3fa;line-height:1.35;overflow-wrap:anywhere}
+.rt5-ev small{font-size:11.5px;color:#8fa1ba}
+
+.rt5-map-tools{display:flex;align-items:center;gap:8px}
+.rt5 .rt5-mapcard .rt-tabs{display:flex;gap:4px;padding:3px;border:1px solid var(--g-line);border-radius:10px;background:rgba(0,0,0,.25)}
+.rt5 .rt5-mapcard .rt-tabs button{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:0;border-radius:7px;background:none;color:#c3cfe2;font:600 12px/1.2 var(--font);cursor:pointer}
+.rt5 .rt5-mapcard .rt-tabs button[aria-selected="true"]{background:rgba(47,107,255,.25);color:#fff}
+.rt5 .lg{width:8px;height:8px;border-radius:50%;display:inline-block}
+.rt5 .lg.b{background:#4f9cff}.rt5 .lg.o{background:var(--g-orange)}
+.rt5 .rt5-mapcard .rt-icon-btn{position:static;width:32px;height:32px;display:grid;place-items:center;border-radius:9px;border:1px solid var(--g-line);background:rgba(0,0,0,.25);color:#dbe6f5;cursor:pointer}
+.rt5 .rt5-mapcard .rt-icon-btn svg{width:16px;height:16px}
+.rt5-map{position:relative;height:clamp(230px,22vw,300px);border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.06);background:#0a1220}
+.rt5-map #rt-map-slot,.rt5-map #rt-live-map{position:absolute;inset:0;height:100%!important;width:100%!important;min-height:0!important;border:0!important;border-radius:0!important}
+.rt5 .rt5-mapcard .rt-map-note{position:static!important;margin:8px 2px 0;padding:0;background:none!important;border:0!important;font-size:11.5px;color:#8fa1ba;transform:none!important}
+.rt5-mapcard:fullscreen{display:flex;flex-direction:column;border-radius:0}
+.rt5-mapcard:fullscreen .rt5-map{flex:1;height:auto}
+
+.rt5-status{display:flex;flex-direction:column}
+.rt5-status-pill{display:flex;justify-content:center;margin:2px 0 14px}
+.rt5-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font:700 12px/1.4 var(--font);background:rgba(255,255,255,.07);color:#c3cfe2;border:1px solid var(--g-line)}
+.rt5-pill svg{width:14px;height:14px}
+.rt5-pill.ok{background:rgba(52,211,153,.13);color:#4ade80;border-color:rgba(52,211,153,.3)}
+.rt5-pill.warn{background:rgba(255,138,31,.14);color:#ffb36b;border-color:rgba(255,138,31,.32)}
+.rt5-rings{display:flex;justify-content:space-around;gap:10px;flex-wrap:wrap;margin-top:auto;margin-bottom:auto}
+.rt5-ring{position:relative;display:grid;justify-items:center;text-align:center;width:112px}
+.rt5-ring svg{width:96px;height:96px;transform:rotate(-90deg)}
+.rt5-ring circle{fill:none;stroke-width:7}
+.rt5-ring .bg{stroke:rgba(255,255,255,.08)}
+.rt5-ring .fg{stroke-linecap:round;transition:stroke-dashoffset .8s ease}
+.rt5-ring.b .fg{stroke:#3b82f6}
+.rt5-ring.o .fg{stroke:var(--g-orange)}
+.rt5-ring svg{background:none!important;border:0!important;box-shadow:none!important}
+.rt5-ring>b{position:absolute;top:48px;left:0;right:0;transform:translateY(-50%);font:800 21px/1 var(--font);color:#fff}
+.rt5-ring>span{margin-top:8px;font:700 13.5px/1.2 var(--font);color:#fff}
+.rt5-ring>small{font-size:11.5px;color:#8fa1ba}
+
+.rt5-quick-list{display:grid;gap:7px}
+.rt5-quick-list button{display:flex;align-items:center;gap:11px;width:100%;padding:9px 12px;border:1px solid rgba(255,255,255,.07);border-radius:10px;background:rgba(255,255,255,.035);color:#e3eaf5;font:600 13px/1.2 var(--font);text-align:left;cursor:pointer;transition:border-color .2s,background .2s,transform .2s}
+.rt5-quick-list button svg{width:17px;height:17px;color:#5aa7ff;flex:none}
+.rt5-quick-list button:nth-child(6) svg{color:#ffc24d}
+.rt5-quick-list button:hover{border-color:#4f9cff66;background:rgba(47,107,255,.10);transform:translateX(2px)}
+
+.rt5-promo{position:relative;overflow:hidden;min-height:150px;display:flex;align-items:center;padding:22px;
+ background:linear-gradient(90deg,rgba(5,11,22,.92) 0,rgba(5,11,22,.55) 55%,rgba(5,11,22,.15) 100%),url("hero.png") 72% 30%/cover no-repeat,radial-gradient(80% 90% at 85% 100%,rgba(255,138,31,.45),transparent 70%),linear-gradient(160deg,#13264a,#0a1426)}
+.rt5-promo-txt{display:grid;gap:4px;justify-items:start}
+.rt5-promo-txt b{font:800 26px/1.15 var(--font);color:#fff}
+.rt5-promo-txt span{font-size:15px;color:#d8e2f0}
+.rt5-btn-o{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:9px 16px;border:0;border-radius:9px;background:linear-gradient(180deg,#ffa043,#f26b00);color:#fff;font:700 13px/1 var(--font);cursor:pointer;box-shadow:0 6px 18px rgba(242,107,0,.35)}
+.rt5-btn-o:hover{filter:brightness(1.08)}
+
+.rt5-div-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rt5-div{position:relative;overflow:hidden;display:flex;align-items:flex-start;gap:12px;min-height:112px;padding:14px 14px 44px;border:1px solid rgba(255,255,255,.09);border-radius:11px;color:#fff;text-align:left;font:inherit;cursor:pointer;
+ background:linear-gradient(90deg,rgba(6,12,24,.94) 0,rgba(6,12,24,.6) 55%,rgba(6,12,24,.15) 100%),var(--div-img) center/cover no-repeat;transition:border-color .2s,transform .2s}
+.rt5-div:hover{border-color:#ff8a1f88;transform:translateY(-2px)}
+.rt5-div-ico{flex:none;color:var(--g-orange)}
+.rt5-div-ico svg{width:26px;height:26px}
+.rt5-div-txt{display:grid;gap:2px;min-width:0}
+.rt5-div-txt b{font:800 16px/1.2 var(--font)}
+.rt5-div-txt small{font-size:12px;color:#d0dbea}
+.rt5-div-txt small.mut{font-size:11.5px}
+.rt5-div-go{position:absolute;left:14px;bottom:11px;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:8px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.35);font:600 11.5px/1.2 var(--font);color:#e3eaf5}
+
+.rt5-top{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rt5-top li{display:grid;grid-template-columns:18px 30px minmax(0,1fr) auto;align-items:center;gap:9px}
+.rt5-rank{font:800 14px/1 var(--font);color:#9fb0c8;text-align:center}
+.rt5-rank.r1{color:#ffc24d}.rt5-rank.r2{color:#cbd5e1}.rt5-rank.r3{color:#e59a5b}
+.rt5-top .rt-avatar{width:30px;height:30px;font-size:12px}
+.rt5-top b{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt5-top em{font-style:normal;font-size:12px;color:#c3cfe2;font-variant-numeric:tabular-nums}
+
+.rt5-wx{display:grid;place-items:center;text-align:center;background:linear-gradient(180deg,rgba(32,52,96,.75),rgba(10,18,34,.88))}
+.rt5-wx-in{display:grid;justify-items:center;gap:3px}
+.rt5-wx-ico{width:58px;height:58px}
+.rt5-wx-in b{font:800 32px/1.1 var(--font);color:#fff}
+.rt5-wx-place{font:700 14px/1.2 var(--font);color:#fff}
+.rt5-wx-in .mut{font-size:12px}
+
+/* --- analyse-sectie (bestaande grafieken en panelen in de nieuwe stijl) --- */
+.rt5-section{margin:30px 0 12px;font:800 12px/1 var(--font);letter-spacing:.16em;text-transform:uppercase;color:#8fa1ba}
+.rt5 .rt-row-charts,.rt5 .rt-row4{margin-top:0;margin-bottom:16px}
+.rt5 .rt-panel-h h2{font-size:15px}
+
+/* --- kerncijfer-tegels elders (bv. Financiën): oude dashboardregels niet laten doorlekken --- */
+.rt-kpis:has(>.rt-kpi>strong){grid-template-columns:repeat(4,minmax(0,1fr))!important;margin:14px 0 0!important;gap:12px}
+.rt-kpi:has(>strong){display:block!important;min-height:0;padding:14px 16px}
+.rt-kpi:has(>strong) strong{white-space:nowrap;overflow-wrap:normal;font-size:clamp(18px,1.8vw,24px)}
+@media(max-width:900px){.rt-kpis:has(>.rt-kpi>strong){grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* --- mobiel menu: dicht achtergrondvlak en nette knoppen --- */
+@media(max-width:1280px){
+ body.rt-menu-open #nav{background:#07101d!important}
+ .rt-mob-user .rt-presence{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0}
+ .rt-mob-user .rt-presence button{display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 6px;border:1px solid var(--g-line);border-radius:10px;background:rgba(255,255,255,.04)!important;color:#dbe6f5;font:600 13px/1.2 var(--font);cursor:pointer}
+ .rt-mob-user .rt-presence button.on{border-color:#4f9cff;background:rgba(47,107,255,.18)!important;color:#fff}
+ .rt-mob-user .rt-presence i{width:8px;height:8px;border-radius:50%;background:#8792a2}
+ .rt-mob-user .rt-presence i.online{background:#34d399}.rt-mob-user .rt-presence i.away{background:#f5b942}
+ .rt-mob-user>button[role=menuitem]{display:flex;align-items:center;gap:11px;width:100%;margin-top:6px;padding:12px 14px;border:1px solid rgba(255,255,255,.06);border-radius:10px;background:rgba(255,255,255,.04)!important;color:#e3eaf5;font:600 14px/1.2 var(--font);text-align:left;cursor:pointer}
+ .rt-mob-user svg{width:18px!important;height:18px!important;flex:none;color:#5aa7ff}
+ .rt-mob-user .rt-sub-sep{height:1px;background:rgba(255,255,255,.08);margin:10px 0}
+ .rt-mob-user .rt-logout{gap:9px;color:#ffb4b4}
+ .rt-mob-user .rt-logout span{display:inline!important}
+ .rt-mob-user .rt-logout svg{color:#ffb4b4}
+}
+
+/* --- responsief --- */
+@media(max-width:1280px){
+ .rt5-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"map map" "ev st" "ev qk"}
+ .rt5-row.b{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"pr pr" "dv dv" "tp wx"}
+}
+@media(max-width:1100px){
+ .rt5-stage{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto}
+ .rt5-live{grid-column:1;grid-row:1}.rt5-kas{grid-column:2;grid-row:1}
+ .rt5-kpis{grid-column:1/3;grid-row:2;margin-top:110px;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+ #v:has(.rt5){padding-left:14px;padding-right:14px}
+ .rt5-stage{grid-template-columns:minmax(0,1fr)}
+ .rt5-live,.rt5-kas,.rt5-kpis{grid-column:1;grid-row:auto}
+ .rt5-live{margin-top:150px}
+ .rt5-kpis{margin-top:0;gap:10px}
+ .rt5-kpi{padding:12px;gap:10px}.rt5-kpi-ico{width:36px;height:36px}.rt5-kpi-body b{font-size:22px}
+ .rt5-row,.rt5-row.b{grid-template-columns:minmax(0,1fr);grid-template-areas:"map" "ev" "st" "qk"}
+ .rt5-row.b{grid-template-areas:"pr" "dv" "tp" "wx"}
+ .rt5-div-grid{grid-template-columns:minmax(0,1fr)}
+ .rt5-h .rt5-map-tools{width:100%;justify-content:space-between}
+}
+@media(max-width:420px){.rt5-kpis{grid-template-columns:minmax(0,1fr)}}
+</style>
 </head>
 <body>
-<a class="rt-skip" href="#v">Naar de inhoud</a>
+<div class="rt5-photo" aria-hidden="true"></div><a class="rt-skip" href="#v">Naar de inhoud</a>
 <header class="rt-top">
-<button type="button" class="rt-brand" aria-label="Royal Tax, naar het dashboard" onclick="if(typeof S!=='undefined'&&S&&typeof setTab==='function')setTab('hub')"><svg viewBox="0 0 64 52" aria-hidden="true"><defs><linearGradient id="rtcH" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb35c"/><stop offset="1" stop-color="#f26b00"/></linearGradient></defs><path d="M6 14l11 12 8-16 7 13 7-13 8 16 11-12-5 26H11z" fill="url(#rtcH)"/><circle cx="6" cy="12" r="3.4" fill="url(#rtcH)"/><circle cx="32" cy="7" r="3.4" fill="url(#rtcH)"/><circle cx="58" cy="12" r="3.4" fill="url(#rtcH)"/><path d="M6 44h52" stroke="url(#rtcH)" stroke-width="5" stroke-linecap="round"/><path d="M4 51c9-4 18-5 28-5s19 1 28 5" stroke="#4f9cff" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".9"/></svg><span class="rt-brand-word"><b>ROYAL TAX</b><small>AIRLINES · TRANSPORT</small></span></button>
+<button type="button" class="rt-brand" aria-label="Royal Tax, naar het dashboard" onclick="if(typeof S!=='undefined'&&S&&typeof setTab==='function')setTab('hub')"><svg viewBox="0 0 64 52" aria-hidden="true"><defs><linearGradient id="rtcH" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb35c"/><stop offset="1" stop-color="#f26b00"/></linearGradient></defs><path d="M6 14l11 12 8-16 7 13 7-13 8 16 11-12-5 26H11z" fill="url(#rtcH)"/><circle cx="6" cy="12" r="3.4" fill="url(#rtcH)"/><circle cx="32" cy="7" r="3.4" fill="url(#rtcH)"/><circle cx="58" cy="12" r="3.4" fill="url(#rtcH)"/><path d="M6 44h52" stroke="url(#rtcH)" stroke-width="5" stroke-linecap="round"/><path d="M4 51c9-4 18-5 28-5s19 1 28 5" stroke="#4f9cff" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".9"/></svg><span class="rt-brand-word"><b>ROYAL TAX</b><small>AIRLINES &amp; TRANSPORT</small></span></button>
 <span class="rt-top-sep" aria-hidden="true"></span>
 <nav id="nav" aria-label="Hoofdnavigatie"></nav>
 <button type="button" class="rt-search" id="rt-search" aria-label="Zoeken (Ctrl+K)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 21l-4.3-4.3M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13z"/></svg><span>Zoeken</span><kbd>Ctrl K</kbd></button>
@@ -315,14 +567,14 @@ function rtChatUnread(){
 function rtNavModel(){
   const unread=rtChatUnread();
   return [
-    {id:'hub',label:'Dashboard',icon:'hub',tabs:['hub'],go:'hub'},
-    {id:'msfs',label:'Airlines',icon:'fl',head:'MSFS 2024',items:HQ_MSFS},
-    {id:'ets',label:'Transport',icon:'etsdash',head:'ETS2',items:HQ_ETS},
+    {id:'hub',label:'Hoofdpagina',icon:'hub',tabs:['hub'],go:'hub'},
+    {id:'msfs',label:'Airlines',icon:'fl',head:'RoyalTax Airlines · MSFS 2024',items:HQ_MSFS},
+    {id:'ets',label:'Transport',icon:'etsdash',head:'RoyalTax Transport · ETS2',items:HQ_ETS},
     {id:'vest',label:'Vestigingen',icon:'vest',tabs:['vest'],go:'vest'},
-    {id:'ops',label:'Live Operations',icon:'ops',tabs:['ops'],go:'ops'},
-    {id:'chat',label:'Chat',icon:'chat',tabs:['chat'],go:'chat',badge:unread},
-    {id:'company',label:'Bedrijf',icon:'bedrijf',items:[['bedrijf','Bedrijfsoverzicht'],['strategy','Strategie & rendement'],['fin','Financiën'],['incidents','Incidenten']]},
-    {id:'people',label:'Team',icon:'pil',items:[['pil','Werknemers & status'],['team','Ranglijst & prestaties'],['news','Mededelingen']]}
+    {id:'people',label:'Medewerkers',icon:'pil',items:[['pil','Werknemers & status'],['team','Ranglijst & prestaties'],['news','Mededelingen']]},
+    {id:'company',label:'Financiën',icon:'fin',items:[['fin','Financiën & kasboek'],['bedrijf','Bedrijfsoverzicht'],['strategy','Strategie & rendement'],['incidents','Incidenten']]},
+    {id:'ops',label:'Live Ops',icon:'ops',tabs:['ops'],go:'ops'},
+    {id:'chat',label:'Chat',icon:'chat',tabs:['chat'],go:'chat',badge:unread}
   ];
 }
 function rtActiveTop(model){
@@ -347,11 +599,18 @@ function rtUserPanel(mobile){
   const me=rtMe(),p=(S&&S.p&&S.p[me])||{},st=presenceState(me),L=pr(Number(p.xp)||0,preq).L;
   const role=p.role=='Werknemer'?'Werknemer • rang '+(p.rank||1):(p.role||'Werknemer');
   const pres=[['online','Online'],['away','Afwezig'],['offline','Offline']].map(([k,n])=>`<button type="button" role="menuitem" class="${st===k?'on':''}" onclick="rtSetPresence('${k}')"><i class="${k}"></i>${n}</button>`).join('');
-  return `<div class="rt-usr-card"><b>${esc(me)}</b><span>${esc(role)} · level ${L}</span></div><div class="rt-presence">${pres}</div><div class="rt-sub-sep"></div><button type="button" role="menuitem" onclick="rtGo('pil')">${ic('pil')}<span>Werknemers & status</span></button><button type="button" role="menuitem" onclick="rtGo('info')">${ic('info')}<span>Handleiding</span></button><button type="button" role="menuitem" onclick="rtToggleTheme()">${rtSvg('M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z')}<span>Thema: ${rtTheme()==='dark'?'donker → licht (beta)':'licht → donker'}</span></button>${mobile?`<button type="button" role="menuitem" onclick="rtPaletteOpen()">${rtSvg('M21 21l-4.3-4.3M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13z')}<span>Zoeken</span></button>`:''}${isOwner()?`<button type="button" role="menuitem" onclick="rtGo('adm')">${ic('adm')}<span>Beheer</span></button>`:''}`;
+  return `<div class="rt-usr-card"><b>${esc(me)}</b><span>${esc(role)} · level ${L}</span></div><div class="rt-presence">${pres}</div><div class="rt-sub-sep"></div><button type="button" role="menuitem" onclick="rtGo('pil')">${ic('pil')}<span>Werknemers & status</span></button><button type="button" role="menuitem" onclick="rtGo('info')">${ic('info')}<span>Handleiding</span></button><button type="button" role="menuitem" onclick="rtToggleTheme()">${rtSvg('M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z')}<span>Thema: ${rtTheme()==='dark'?'donker → licht (beta)':'licht → donker'}</span></button>${mobile?`<button type="button" role="menuitem" onclick="rtPaletteOpen()">${rtSvg('M21 21l-4.3-4.3M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13z')}<span>Zoeken</span></button>`:''}${isOwner()?`<button type="button" role="menuitem" onclick="rtGo('adm')">${ic('adm')}<span>Beheer</span></button>`:''}${mobile?'':`<div class="rt-sub-sep"></div><button type="button" role="menuitem" class="rt5-logout-item" onclick="rtLogout()">${RT_LOGOUT_ICO}<span>Uitloggen</span></button>`}`;
 }
+/* meldingenbel: gebeurtenissen van anderen sinds je laatste klik op de bel */
+function rtBellCount(){
+  const me=rtMe(),key='rt_bell_seen_'+me,seen=Number(ls(key)||0);
+  if(!seen){ls(key,String(Date.now()));return 0}
+  return ((S&&S.feed)||[]).filter(f=>f.w!==me&&(Number(f.ts)||0)>seen).length;
+}
+function rtBellOpen(){ls('rt_bell_seen_'+rtMe(),String(Date.now()));rtGo('news');rtRenderChrome()}
 function rtUserHTML(){
-  const me=rtMe(),st=presenceState(me),open=RT_NAV.open==='usr';
-  return `<div class="rt-usr has-sub ${open?'open':''}" data-sub="usr"><button type="button" class="rt-usr-btn" aria-haspopup="true" aria-expanded="${open}" data-rt-toggle="usr"><span class="rt-avatar">${esc(rtInit(me))}<i class="${st}"></i></span><span class="rt-usr-txt"><b>Welkom, ${esc(me)}</b><span class="${st}">${presenceLabel(st)}</span></span>${RT_CHEV}</button><div class="rt-sub" role="menu" aria-label="Gebruikersmenu">${rtUserPanel(false)}</div></div><button type="button" class="rt-logout" onclick="rtLogout()">${RT_LOGOUT_ICO}<span>Uitloggen</span></button>`;
+  const me=rtMe(),st=presenceState(me),open=RT_NAV.open==='usr',bell=rtBellCount();
+  return `<button type="button" class="rt5-bell" onclick="rtBellOpen()" aria-label="Meldingen${bell?' ('+bell+' nieuw)':''}">${rtSvg('M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0')}${bell?`<em>${bell>99?'99+':bell}</em>`:''}</button><div class="rt-usr has-sub ${open?'open':''}" data-sub="usr"><button type="button" class="rt-usr-btn" aria-haspopup="true" aria-expanded="${open}" data-rt-toggle="usr"><span class="rt-avatar">${esc(rtInit(me))}<i class="${st}"></i></span><span class="rt-usr-txt"><small>Welkom terug,</small><b>${esc(me)}</b></span>${RT_CHEV}</button><div class="rt-sub" role="menu" aria-label="Gebruikersmenu">${rtUserPanel(false)}</div></div>`;
 }
 function rtRenderChrome(){
   const nav=document.getElementById('nav'),ttl=document.getElementById('ttl');
@@ -447,7 +706,7 @@ function rtDashData(){
   const allOps=[...flights,...trips],cnt=(a,b)=>allOps.filter(x=>inWin(x,a,b)).length;
   const opsTrend=trustable?rtTrend(cnt(0,W),cnt(W,2*W)):null;
   const kasWeek=led.length?led.filter(x=>Number(x.ts)>now-W).reduce((n,x)=>n+(Number(x.amount)||0),0):null;
-  return {flights,trips,totalRev,trend,days,spark,staff,aF,aT,vehicles,opsCount:flights.length+trips.length,opsTrend,kasWeek};
+  return {flights,trips,totalRev,trend,days,spark,staff,aF,aT,vehicles,opsCount:Math.max(flights.length,Number(S.t&&S.t.n)||0)+trips.length,opsTrend,kasWeek};
 }
 function rtSparkSVG(pts){
   if(!pts||pts.length<2)return '';const w=76,h=34,mn=Math.min(...pts),mx=Math.max(...pts),r=mx-mn||1;
@@ -474,57 +733,172 @@ function rtStaffHTML(d){
 }
 function rtDashTab(k){RT_DASH.ops=k;render()}
 function royalTaxDashboardUI(){
-  const d=rtDashData(),me=rtMe(),online=d.staff.filter(p=>p.st==='online'),active=d.aF.length+d.aT.length;
-  const list=RT_DASH.ops==='air'?d.aF:d.aT;
-  const ring=d.vehicles>0?Math.min(1,active/d.vehicles):0,C=2*Math.PI*21;
-  const feed=(S.feed||[]).slice(0,5),led=(S.ledger||[]).slice(0,4);
-  let hqN=0,lv='';try{hqN=Object.keys(hqBuilds()).length;const b=branches();lv=`MSFS niveau ${b.msfs.level} · ETS2 niveau ${b.ets2.level}`}catch(e){}
-  const tr=d.trend;
-  const avatars=online.slice(0,4).map(p=>`<span title="${esc(p.name)}">${esc(rtInit(p.name))}</span>`).join('')+(online.length>4?`<span class="more">+${online.length-4}</span>`:'');
-  return `<div class="rt-dash">
-  <section class="rt-hero" style="--hero-img:url('${RT_IMG.plane}')" aria-label="Welkom">
-    <div class="rt-hero-bg"></div>
-    <div class="rt-hero-fx" id="rt-hero-live-fx" aria-label="Live community animaties"><i class="rt-sun"></i><div class="rt-hero-live-items" id="rt-hero-live-items"></div><div class="rt-hero-live-status" id="rt-hero-live-status"><span class="rt-hero-status-dot"></span> Community verbinden…</div></div>
-    <div class="rt-eyebrow">Welkom terug</div>
-    <h1>${rtNameHTML(me)}</h1>
-    <p>Samen hoger. Verder. Royal Tax.</p>
-    <div class="rt-hero-meta"><span class="pill">${esc(S.name||'Royal Tax')}</span><span class="pill">Bedrijfslevel ${pr(S.xp,req).L} · ${esc(tt(pr(S.xp,req).L,TT))}</span><span class="pill">Thuisbasis ${esc(S.home||'–')}</span></div>
-  </section>
-  <section class="rt-kpis" aria-label="Kerncijfers">
-    <div class="rt-kpi" data-tip="${esc('Kas: '+E(S.bal)+'\nVrij besteedbaar: '+E(availableFunds())+'\nGereserveerd: '+E((Number(S.bal)||0)-availableFunds()))}"><span class="rt-kpi-ico">${rtSvg('M3 7a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v2M3 7v11a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-3M3 7h15a2 2 0 0 1 2 2v3M16 14h5v3h-5a1.5 1.5 0 0 1 0-3z')}</span><div class="rt-kpi-body"><span>Bedrijfskas</span><b>${E(S.bal)}</b><small>Vrij besteedbaar ${E(availableFunds())}</small>${d.kasWeek!==null?`<small class="${d.kasWeek>=0?'rt-up':'rt-down'}">${d.kasWeek>=0?'▲ +':'▼ −'}${E(Math.abs(d.kasWeek))} deze week</small>`:''}</div>${rtSparkSVG(d.spark)}</div>
-    <div class="rt-kpi" data-tip="${esc('Vluchten: '+E(Number(S.t&&S.t.e)||0)+'\nRitten: '+E(d.totalRev-(Number(S.t&&S.t.e)||0)))}"><span class="rt-kpi-ico">${rtSvg('M4 20V10M10 20V4M16 20v-7M22 20H2')}</span><div class="rt-kpi-body"><span>Totale omzet</span><b>${E(d.totalRev)}</b>${tr?`<small class="${tr.up?'rt-up':'rt-down'}">${tr.up?'▲':'▼'} ${tr.up?'+':''}${tr.p}% t.o.v. vorige week</small>`:'<small>Vluchten + ritten</small>'}</div></div>
-    <div class="rt-kpi" data-tip="${esc('Vluchten: '+d.flights.length+'\nRitten: '+d.trips.length+'\nLaatste 7 dagen: '+d.days.reduce((a,b)=>a+b,0))}"><span class="rt-kpi-ico">${rtSvg(RT_PLANE)}</span><div class="rt-kpi-body"><span>Totaal operaties</span><b>${d.opsCount.toLocaleString('nl-NL')}</b><small>${d.flights.length} vluchten + ${d.trips.length} ritten</small>${d.opsTrend?`<small class="${d.opsTrend.up?'rt-up':'rt-down'}">${d.opsTrend.up?'▲ +':'▼ '}${d.opsTrend.p}% t.o.v. vorige week</small>`:''}</div><div class="rt-bars" title="Operaties per dag, laatste 7 dagen">${(()=>{const mx=Math.max(1,...d.days);return d.days.map(v=>`<i style="height:${Math.max(10,v/mx*100)}%"></i>`).join('')})()}</div></div>
-    <div class="rt-kpi" data-tip="${esc('Vluchten onderweg: '+d.aF.length+'\nRitten onderweg: '+d.aT.length+'\nVoertuigen totaal: '+d.vehicles)}"><span class="rt-kpi-ico">${rtSvg('M6 4l14 8-14 8z')}</span><div class="rt-kpi-body"><span>Actieve operaties</span><b>${active}</b><small>${d.aF.length} vluchten · ${d.aT.length} ritten</small></div><div class="rt-ring" role="img" aria-label="${active} van ${d.vehicles} voertuigen actief"><svg viewBox="0 0 52 52"><circle class="bg" cx="26" cy="26" r="21"/><circle class="fg" cx="26" cy="26" r="21" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C*(1-ring)).toFixed(1)}"/></svg></div></div>
-    <div class="rt-kpi" data-tip="${esc('Online: '+(online.map(p=>p.name).join(', ')||'niemand')+'\nTotaal werknemers: '+d.staff.length)}"><span class="rt-kpi-ico">${rtSvg('M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8')}</span><div class="rt-kpi-body"><span>Actieve medewerkers</span><b>${online.length}</b><small class="${online.length?'rt-up':''}">${online.length?'● online':'niemand online'} · ${d.staff.length} totaal</small></div><div class="rt-stack">${avatars}</div></div>
-  </section>
-  <section class="rt-row3">
-    <div class="rt-panel" aria-labelledby="rt-ops-h">
-      <div class="rt-panel-h"><div><h2 id="rt-ops-h"><span class="dot"></span>Live Operations Center</h2><p>Volg alle lopende vluchten en ritten live</p></div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap"><div class="rt-tabs" role="tablist"><button role="tab" aria-selected="${RT_DASH.ops==='air'}" onclick="rtDashTab('air')">Airlines (${d.aF.length})</button><button role="tab" aria-selected="${RT_DASH.ops==='road'}" onclick="rtDashTab('road')">Transport (${d.aT.length})</button></div><button class="rt-link-sm" onclick="setTab('ops')">Bekijk live overzicht ${RT_ARROW.replace('<svg','<svg width="14" height="14"')}</button></div>
-      <div class="rt-ops">${list.length?list.map(rtOpHTML).join(''):`<div class="rt-empty"><div>${rtSvg(RT_DASH.ops==='air'?RT_PLANE:RT_TRUCK)}<b>${RT_DASH.ops==='air'?'Geen vluchten onderweg':'Geen ritten onderweg'}</b><div>${RT_DASH.ops==='air'?'Zodra iemand een vlucht start, verschijnt die hier live.':'Zodra iemand een rit start, verschijnt die hier live.'}</div><button class="btn" onclick="setTab('${RT_DASH.ops==='air'?'fl':'etsdash'}')">${RT_DASH.ops==='air'?'Start een vlucht':'Start een rit'}</button></div></div>`}</div>
+  const d=rtDashData(),me=rtMe(),online=d.staff.filter(p=>p.st==='online'),now=Date.now();
+  const more=(t,label)=>`<button type="button" class="rt5-more" onclick="rtGo('${t}')">${label||'Bekijk alles'} ${RT_ARROW.replace('<svg','<svg width="14" height="14"')}</button>`;
+  const ICO={
+    euro:'M17 6.5A6.5 6.5 0 0 0 7 12a6.5 6.5 0 0 0 10 5.5M4 10h9M4 14h9',
+    star:'M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z',
+    users:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8',
+    bld:'M4 21V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v17M14 9h5a1 1 0 0 1 1 1v11M3 21h18M8 7h2M8 11h2M8 15h2',
+    bell:'M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0',
+    globe:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18',
+    pin:'M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21zM12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',
+    chat:'M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z',
+    bolt:'M13 2 4 14h7l-1 8 9-12h-7z',
+    trophy:'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3',
+    check:'M20 6 9 17l-5-5'
+  };
+  const fmtLeft=ms=>{const m=Math.max(0,Math.round(ms/6e4));return m>=60?Math.floor(m/60)+'u '+String(m%60).padStart(2,'0')+'m':m+'m'};
+
+  /* ---- live operations (hero, links) ---- */
+  const ops=[...d.aF.map(o=>{const f=o.f,el=now-Number(f.startedAt),est=(Number(f.estimatedHours)||0)*36e5;
+      const st=el<10*6e4?['Opstijgen','warn']:est&&el>est?['Landen','warn']:['In de lucht','ok'];
+      return {ts:Number(f.startedAt),air:true,title:rtPlaneName(f.ac),route:`${f.a} → ${f.b}`,who:o.who,chip:st,time:est?(el<est?'Resterend '+fmtLeft(est-el):'Verwacht geland'):'Onderweg '+fmtLeft(el)}}),
+    ...d.aT.map(o=>{const t=o.t,el=now-Number(t.startedAt);return {ts:Number(t.startedAt),air:false,title:t.truckName||'Vrachtwagen',route:`${t.from||'?'} → ${t.to||'?'}`,who:o.who,chip:['Onderweg','info'],time:'Onderweg '+fmtLeft(el)}})
+  ].sort((a,b)=>b.ts-a.ts);
+  const opsHTML=ops.length?ops.slice(0,3).map(o=>`<div class="rt5-op"><span class="rt5-op-ico ${o.air?'air':'road'}">${rtSvg(o.air?RT_PLANE:RT_TRUCK)}</span><div class="rt5-op-main"><b>${esc(o.title)}</b><span>${esc(o.route)}</span><em class="rt5-chip ${o.chip[1]}">${o.chip[0]}</em></div><div class="rt5-op-side"><small>${esc(o.time)}</small><small class="mut">${esc(o.who)}</small></div></div>`).join('')+(ops.length>3?`<div class="rt5-op-more">+${ops.length-3} andere operatie${ops.length-3===1?'':'s'}</div>`:'')
+    :`<div class="rt5-empty">${rtSvg(RT_PLANE)}<b>Niemand onderweg</b><span>Start een vlucht of rit en die verschijnt hier live.</span><div class="rt5-empty-btns"><button class="btn" onclick="rtGo('fl')">Vlucht starten</button><button class="btn alt" onclick="rtGo('etsdash')">Rit starten</button></div></div>`;
+
+  /* ---- bedrijfskas (hero, rechts) ---- */
+  const bal=Number(S.bal)||0,kw=d.kasWeek,base=kw!==null?bal-kw:0,kasPct=kw!==null&&base>0?Math.round(kw/base*1000)/10:null;
+  const spark=(()=>{const pts=d.spark;if(!pts||pts.length<2)return '<div class="rt5-spark-empty">Kasverloop verschijnt na een paar boekingen</div>';
+    const w=280,h=70,mn=Math.min(...pts),mx=Math.max(...pts),r=mx-mn||1,xy=pts.map((v,i)=>[(i/(pts.length-1))*w,h-4-((v-mn)/r)*(h-12)]);
+    const ln=xy.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join('');
+    return `<svg class="rt5-spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="rt5sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a1f" stop-opacity=".35"/><stop offset="1" stop-color="#ff8a1f" stop-opacity="0"/></linearGradient></defs><path d="${ln}L${w} ${h}L0 ${h}Z" fill="url(#rt5sg)"/><path d="${ln}" fill="none" stroke="#ff9a3d" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`})();
+
+  /* ---- KPI's ---- */
+  const nFleet=(S.fleet||[]).length,nTrucks=((ets().trucks)||[]).length;
+  let vest=0,vestTot=0;try{vestTot=Object.keys(HQ_MODULES).length;vest=Object.keys(HQ_MODULES).filter(hqOwned).length}catch(e){}
+  const kpi=(ico,label,val,sub,tab,cls)=>`<button type="button" class="rt5-kpi ${cls||''}" onclick="rtGo('${tab}')"><span class="rt5-kpi-ico">${ico}</span><span class="rt5-kpi-body"><span>${label}</span><b>${val}</b><small>${sub}</small></span><span class="rt5-kpi-deco" aria-hidden="true">${ico}</span></button>`;
+
+  /* ---- recente gebeurtenissen ---- */
+  const evIco=k=>/^(f|fleet|crash|incomplete|vip)$/.test(k)?RT_PLANE:/^ets/.test(k)?RT_TRUCK:/^(lv|pr|etsach|bon)$/.test(k)?ICO.star:/^(join|chat)$/.test(k)?ICO.users:/^(pay|fin|strategy)$/.test(k)?ICO.euro:/^req$/.test(k)?ICO.check:ICO.bell;
+  const feed=(S.feed||[]).slice(0,5);
+  const feedHTML=feed.length?`<ul class="rt5-ev">${feed.map(f=>`<li><span class="rt5-ev-ico k-${esc(f.k||'x')}">${rtSvg(evIco(String(f.k||'')))}</span><div><b>${esc(f.t||f.h||'Bedrijfsactiviteit')}</b><small>${rtAgo(f.ts)}${f.w?' · '+esc(f.w):''}</small></div></li>`).join('')}</ul>`:'<div class="rt5-empty sm"><b>Nog geen gebeurtenissen</b><span>Nieuwe activiteiten verschijnen hier automatisch.</span></div>';
+
+  /* ---- operationele status (gemiddelde conditie) ---- */
+  const avg=a=>a.length?Math.round(a.reduce((n,x)=>n+(Number(x.cond??100)||0),0)/a.length):null;
+  const cA=avg(S.fleet||[]),cT=avg((ets().trucks)||[]),low=[...(S.fleet||[]),...((ets().trucks)||[])].filter(x=>Number(x.cond??100)<70).length;
+  const ring=(v,cls,label)=>{const C=2*Math.PI*34,p=v==null?0:v/100;return `<div class="rt5-ring ${cls}"><svg viewBox="0 0 80 80" aria-hidden="true"><circle class="bg" cx="40" cy="40" r="34"/><circle class="fg" cx="40" cy="40" r="34" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C*(1-p)).toFixed(1)}"/></svg><b>${v==null?'–':v+'%'}</b><span>${label}</span><small>${v==null?'Geen voertuigen':'Gem. conditie'}</small></div>`};
+  const statusPill=!(nFleet+nTrucks)?'<span class="rt5-pill">Nog geen voertuigen</span>':low?`<span class="rt5-pill warn">${low} voertuig${low===1?'':'en'} onderhoud aanbevolen</span>`:`<span class="rt5-pill ok">${rtSvg(ICO.check)}Alles operationeel</span>`;
+
+  /* ---- snelmenu ---- */
+  const quick=[[RT_PLANE,'Nieuwe vlucht plannen','fl'],[RT_TRUCK,'Nieuwe rit plannen','etsdash'],[ICO.bld,'Vestigingen beheren','vest'],[ICO.pin,'Bekijk kaarten','msfsroutes'],[ICO.chat,'Interne chat','chat'],[ICO.star,'Upgrades','vest']];
+
+  /* ---- top 3 medewerkers (vlieg- + rijuren) ---- */
+  const top=Object.entries(S.p||{}).map(([name,p])=>{let h=Number(p.hrs)||0;try{h+=employeeDriveHours(name)}catch(e){}return {name,h}}).sort((a,b)=>b.h-a.h).slice(0,3);
+  const topHTML=top.length?`<ol class="rt5-top">${top.map((x,i)=>`<li><span class="rt5-rank r${i+1}">${i+1}</span><span class="rt-avatar">${esc(rtInit(x.name))}</span><b data-person="${esc(x.name)}">${esc(x.name)}</b><em>${x.h.toLocaleString('nl-NL',{maximumFractionDigits:1,minimumFractionDigits:1})} u</em></li>`).join('')}</ol>`:'<div class="rt5-empty sm"><span>Nog geen medewerkers.</span></div>';
+
+  /* ---- weer op de thuisbasis ---- */
+  setTimeout(rtWeatherLoad,0);
+
+  return `<div class="rt-dash rt5">
+  <section class="rt5-stage" aria-label="Welkom">
+    <div class="rt5-card rt5-live">
+      <div class="rt5-h"><h3><span class="rt5-dot"></span>Live Operations</h3>${more('ops')}</div>
+      <div class="rt5-ops">${opsHTML}</div>
     </div>
-    <div class="rt-panel rt-map-panel" id="rt-map-panel">
-      <div class="rt-map-bar"><div class="rt-tabs" role="tablist" id="rt-map-tabs"><button role="tab" aria-selected="${RT_DASH.map==='all'}" onclick="rtMapFilter('all')">Alle operaties</button><button role="tab" aria-selected="${RT_DASH.map==='air'}" onclick="rtMapFilter('air')">Airlines</button><button role="tab" aria-selected="${RT_DASH.map==='road'}" onclick="rtMapFilter('road')">Transport</button></div><button class="rt-icon-btn" aria-label="Kaart op volledig scherm" onclick="rtMapFull()">${rtSvg('M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5')}</button></div>
-      <div id="rt-map-slot"></div><div class="rt-map-note" id="rt-map-note">Kaart wordt geladen…</div>
+    <div class="rt5-card rt5-kas" data-tip="${esc('Vrij besteedbaar: '+E(availableFunds())+'\nGereserveerd: '+E(bal-availableFunds()))}">
+      <div class="rt5-h"><h3>Bedrijfskas ${rtSvg('M3 17l6-6 4 4 8-8M15 7h6v6')}</h3></div>
+      <div class="rt5-kas-row"><b>${E(bal)}</b>${kasPct!==null?`<span class="rt5-delta ${kasPct>=0?'up':'down'}">${kasPct>=0?'▲ +':'▼ '}${kasPct.toLocaleString('nl-NL')}%</span>`:''}</div>
+      <small class="mut">${kw!==null?`${kw>=0?'+':'−'}${E(Math.abs(kw))} deze week`:'Vrij besteedbaar '+E(availableFunds())}</small>
+      ${spark}
     </div>
+    <div class="rt5-kpis">
+      ${kpi(rtSvg(RT_PLANE),'Actieve vluchten',d.aF.length,`${nFleet} toestel${nFleet===1?'':'len'} in de vloot`,'ops')}
+      ${kpi(rtSvg(RT_TRUCK),'Actieve ritten',d.aT.length,`${nTrucks} vrachtwagen${nTrucks===1?'':'s'} in het wagenpark`,'ops')}
+      ${kpi(rtSvg(ICO.users),'Online medewerkers',online.length,`van ${d.staff.length} medewerkers`,'pil')}
+      ${kpi(rtSvg(ICO.bld),'Vestigingen',vest,vestTot?`van ${vestTot} uitbreidingen gebouwd`:'Hoofdkantoor','vest')}
+    </div>
+  </section>
+
+  <section class="rt5-row" aria-label="Overzicht">
+    <div class="rt5-card rt5-events">
+      <div class="rt5-h"><h3>Recente gebeurtenissen</h3>${more('news','Alles')}</div>
+      ${feedHTML}
+    </div>
+    <div class="rt5-card rt5-mapcard rt-map-panel" id="rt-map-panel">
+      <div class="rt5-h"><h3>${rtSvg(ICO.globe)}Live wereldkaart</h3>
+        <div class="rt5-map-tools"><div class="rt-tabs" role="tablist" id="rt-map-tabs"><button role="tab" aria-selected="${RT_DASH.map==='all'}" onclick="rtMapFilter('all')">Alles</button><button role="tab" aria-selected="${RT_DASH.map==='air'}" onclick="rtMapFilter('air')"><i class="lg b"></i>Vluchten</button><button role="tab" aria-selected="${RT_DASH.map==='road'}" onclick="rtMapFilter('road')"><i class="lg o"></i>Ritten</button></div><button class="rt-icon-btn" aria-label="Kaart op volledig scherm" onclick="rtMapFull()">${rtSvg('M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5')}</button></div>
+      </div>
+      <div class="rt5-map"><div id="rt-map-slot"></div></div><div class="rt-map-note" id="rt-map-note">Kaart wordt geladen…</div>
+    </div>
+    <div class="rt5-card rt5-status">
+      <div class="rt5-h"><h3><span class="rt5-dot g"></span>Operationele status</h3></div>
+      <div class="rt5-status-pill">${statusPill}</div>
+      <div class="rt5-rings">${ring(cA,'b','Vliegtuigen')}${ring(cT,'o','Vrachtwagens')}</div>
+    </div>
+    <div class="rt5-card rt5-quick">
+      <div class="rt5-h"><h3>${rtSvg(ICO.bolt)}Snelmenu</h3></div>
+      <div class="rt5-quick-list">${quick.map(([p,l,t])=>`<button type="button" onclick="rtGo('${t}')">${rtSvg(p)}<span>${l}</span></button>`).join('')}</div>
+    </div>
+  </section>
+
+  <section class="rt5-row b" aria-label="Royal Tax">
+    <div class="rt5-card rt5-promo">
+      <div class="rt5-promo-txt"><b>${esc(S.name||'Royal Tax')}</b><span>Together. Higher. Further.</span><button type="button" class="rt5-btn-o" onclick="rtGo('bedrijf')">Meer over ons ${RT_ARROW.replace('<svg','<svg width="14" height="14"')}</button></div>
+    </div>
+    <div class="rt5-card rt5-divs">
+      <div class="rt5-h"><h3>${rtSvg(ICO.star)}Onze bedrijfsonderdelen</h3></div>
+      <div class="rt5-div-grid">
+        <button type="button" class="rt5-div air" style="--div-img:url('${RT_IMG.plane}')" onclick="rtGo('dash')"><span class="rt5-div-ico">${rtSvg(RT_PLANE)}</span><span class="rt5-div-txt"><b>RoyalTax Airlines</b><small>Vliegen naar de toekomst</small><small class="mut">${nFleet} toestellen · ${(Number(S.t&&S.t.n)||d.flights.length).toLocaleString('nl-NL')} vluchten</small></span><span class="rt5-div-go">Bekijk afdeling ${RT_ARROW.replace('<svg','<svg width="13" height="13"')}</span></button>
+        <button type="button" class="rt5-div road" style="--div-img:url('${RT_IMG.truck}')" onclick="rtGo('etsdash')"><span class="rt5-div-ico">${rtSvg(RT_TRUCK)}</span><span class="rt5-div-txt"><b>RoyalTax Transport</b><small>Transport zonder grenzen</small><small class="mut">${nTrucks} vrachtwagens · ${d.trips.length.toLocaleString('nl-NL')} ritten</small></span><span class="rt5-div-go">Bekijk afdeling ${RT_ARROW.replace('<svg','<svg width="13" height="13"')}</span></button>
+      </div>
+    </div>
+    <div class="rt5-card rt5-topcard">
+      <div class="rt5-h"><h3>${rtSvg(ICO.trophy)}Top 3 medewerkers</h3>${more('team','Alles')}</div>
+      ${topHTML}
+    </div>
+    <div class="rt5-card rt5-wx" id="rt5-wx">${rtWeatherHTML()}</div>
+  </section>
+
+  <h2 class="rt5-section">Analyse &amp; financiën</h2>
+  ${rtChartsHTML(d)}
+  <section class="rt-row4">
+    <div class="rt-panel"><div class="rt-panel-h"><h2>${rtSvg('M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6')}Laatste kasboekmutaties</h2><button class="rt-link-sm" onclick="setTab('fin')">Kasboek ${RT_ARROW.replace('<svg','<svg width="14" height="14"')}</button></div>
+      <div class="rt-led">${(S.ledger||[]).slice(0,5).map(x=>`<div class="row"><div style="min-width:0"><b style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.description||x.kind||'Boeking')}</b><div class="mut" style="font-size:12px">${esc(x.who||'Systeem')} · ${moneyDate(x.ts)}</div></div><b class="${Number(x.amount)>=0?'ok':'bad'}" style="white-space:nowrap">${Number(x.amount)>=0?'+ ':''}${E(Number(x.amount)||0)}</b></div>`).join('')||'<div class="rt-empty"><div><b>Nog geen mutaties</b>Boekingen verschijnen hier automatisch.<br><button class="btn alt" onclick="setTab(\'fin\')">Open financiën</button></div></div>'}</div></div>
     <div class="rt-panel" aria-labelledby="rt-st-h">
-      <div class="rt-panel-h"><h2 id="rt-st-h">${rtSvg('M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z')}Medewerker activiteit</h2><button class="rt-link-sm" onclick="setTab('pil')">Bekijk alles ${RT_ARROW.replace('<svg','<svg width="14" height="14"')}</button></div>
+      <div class="rt-panel-h"><h2 id="rt-st-h">${rtSvg(ICO.users)}Medewerker activiteit</h2><button class="rt-link-sm" onclick="setTab('pil')">Bekijk alles ${RT_ARROW.replace('<svg','<svg width="14" height="14"')}</button></div>
       ${rtStaffHTML(d)}
     </div>
   </section>
-  ${rtChartsHTML(d)}
-  <section class="rt-row4">
-    <div class="rt-panel"><div class="rt-panel-h"><h2>${rtSvg('M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0')}Recente gebeurtenissen</h2><button class="rt-link-sm" onclick="setTab('news')">Bekijk alles ${RT_ARROW.replace('<svg','<svg width="14" height="14"')}</button></div>
-      ${feed.length?`<ul class="rt-tl">${feed.map(f=>`<li data-ts="${Number(f.ts)||0}" data-tip="${esc(new Date(f.ts||Date.now()).toLocaleString('nl-NL')+'\n'+(f.w||'Royal Tax'))}"><time>${rtAgo(f.ts)}</time><i class="d"></i><span>${esc(f.t||f.h||'Bedrijfsactiviteit')}</span></li>`).join('')}</ul>`:'<div class="rt-empty"><div><b>Nog geen gebeurtenissen</b>Nieuwe activiteiten verschijnen hier zodra ze worden geregistreerd.<br><button class="btn" onclick="setTab(\'fl\')">Registreer een vlucht</button></div></div>'}</div>
-    <div class="rt-panel"><div class="rt-panel-h"><h2>${rtSvg('M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6')}Laatste kasboekmutaties</h2><button class="rt-link-sm" onclick="setTab('fin')">Kasboek ${RT_ARROW.replace('<svg','<svg width="14" height="14"')}</button></div>
-      <div class="rt-led">${led.map(x=>`<div class="row"><div style="min-width:0"><b style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.description||x.kind||'Boeking')}</b><div class="mut" style="font-size:12px">${esc(x.who||'Systeem')} · ${moneyDate(x.ts)}</div></div><b class="${Number(x.amount)>=0?'ok':'bad'}" style="white-space:nowrap">${Number(x.amount)>=0?'+':'−'}${E(Math.abs(Number(x.amount)||0))}</b></div>`).join('')||'<div class="rt-empty"><div><b>Nog geen mutaties</b>Boekingen verschijnen hier automatisch.<br><button class="btn alt" onclick="setTab(\'fin\')">Open financiën</button></div></div>'}</div></div>
-  </section>
-  <section class="rt-tiles" aria-label="Afdelingen">
-    <button class="rt-tile air" style="--tile-img:url('${RT_IMG.plane}')" onclick="setTab('dash')"><b>Airlines</b><small>Vlootbeheer, routes en meer</small><small>${(S.fleet||[]).length} toestellen · ${Number(S.t&&S.t.n||0)} vluchten</small><span class="go">${RT_ARROW}</span></button>
-    <button class="rt-tile road" style="--tile-img:url('${RT_IMG.truck}')" onclick="setTab('etsdash')"><b>Transport</b><small>Vrachtwagens, routes en meer</small><small>${((ets().trucks)||[]).length} vrachtwagens · ${d.trips.length} ritten</small><span class="go">${RT_ARROW}</span></button>
-    <button class="rt-tile hq" onclick="setTab('vest')"><b>Vestigingen</b><small>Uitbreiden en beheren</small><small>${hqN} uitbreidingen${lv?' · '+lv:''}</small><span class="go">${RT_ARROW}</span></button>
-  </section>
   </div>`;
+}
+
+/* ---------- weer op de thuisbasis (Open-Meteo, geen sleutel nodig) ---------- */
+const RT_WX={data:null,key:'',loading:false};
+function rtWeatherPlace(){
+  const h=S&&S.home,A=h&&typeof AP!=='undefined'&&AP[h];
+  const nm=String((typeof APN!=='undefined'&&APN[h])||h).split(/ (?:International|Intl|Regional|Municipal|Airport|Airfield|Air Base)/i)[0].trim()||h;
+  return A?{lat:A[0],lon:A[1],name:nm}:{lat:52.22,lon:6.89,name:'Enschede'};
+}
+function rtWeatherDesc(c){
+  c=Number(c);
+  if(c===0)return ['Helder','sun'];if(c<=2)return ['Licht bewolkt','part'];if(c===3)return ['Bewolkt','cloud'];
+  if(c===45||c===48)return ['Mist','cloud'];if(c>=51&&c<=57)return ['Motregen','rain'];if(c>=61&&c<=67)return ['Regen','rain'];
+  if(c>=71&&c<=77)return ['Sneeuw','snow'];if(c>=80&&c<=82)return ['Buien','rain'];if(c>=85&&c<=86)return ['Sneeuwbuien','snow'];
+  if(c>=95)return ['Onweer','storm'];return ['Onbekend','cloud'];
+}
+function rtWeatherHTML(){
+  const pl=rtWeatherPlace(),w=RT_WX.data;
+  const sun='<circle cx="17" cy="15" r="6" fill="#ffc24d"/><g stroke="#ffc24d" stroke-width="2" stroke-linecap="round"><path d="M17 4v2M17 24v2M6 15h2M26 15h2M9.2 7.2l1.4 1.4M23.4 21.4l1.4 1.4M9.2 22.8l1.4-1.4M23.4 8.6l1.4-1.4"/></g>';
+  const cloud='<path d="M12 30h17a6 6 0 0 0 0-12 8 8 0 0 0-15.4-2A7 7 0 0 0 12 30z" fill="#dbe6f5"/>';
+  const ico=k=>`<svg viewBox="0 0 40 40" class="rt5-wx-ico" aria-hidden="true">${k==='sun'?sun:k==='part'?sun+cloud:k==='rain'?cloud+'<g stroke="#5aa7ff" stroke-width="2" stroke-linecap="round"><path d="M15 33l-1 3M21 33l-1 3M27 33l-1 3"/></g>':k==='snow'?cloud+'<g fill="#fff"><circle cx="15" cy="35" r="1.4"/><circle cx="21" cy="36" r="1.4"/><circle cx="27" cy="35" r="1.4"/></g>':k==='storm'?cloud+'<path d="M21 30l-3 6h4l-2 4" stroke="#ffc24d" stroke-width="2" fill="none"/>':cloud}</svg>`;
+  if(!w)return `<div class="rt5-wx-in"><span class="rt5-wx-place">${esc(pl.name)}</span><span class="mut">Weer wordt geladen…</span></div>`;
+  const [desc,k]=rtWeatherDesc(w.code);
+  return `<div class="rt5-wx-in">${ico(k)}<b>${Math.round(w.t)}°C</b><span class="rt5-wx-place">${esc(pl.name)}</span><span class="mut">${desc} · wind ${Math.round(w.wind)} km/u</span></div>`;
+}
+async function rtWeatherLoad(){
+  const pl=rtWeatherPlace(),key=pl.lat.toFixed(2)+','+pl.lon.toFixed(2);
+  if(RT_WX.loading||(RT_WX.key===key&&RT_WX.data&&Date.now()-RT_WX.data.at<30*6e4))return;
+  RT_WX.loading=true;
+  try{
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pl.lat}&longitude=${pl.lon}&current=temperature_2m,weather_code,wind_speed_10m`);
+    if(!r.ok)throw Error('wx');const j=await r.json();
+    RT_WX.data={t:j.current.temperature_2m,code:j.current.weather_code,wind:j.current.wind_speed_10m,at:Date.now()};RT_WX.key=key;
+    const el=document.getElementById('rt5-wx');if(el)el.innerHTML=rtWeatherHTML();
+  }catch(e){const el=document.getElementById('rt5-wx');if(el&&!RT_WX.data)el.innerHTML=`<div class="rt5-wx-in"><span class="rt5-wx-place">${esc(pl.name)}</span><span class="mut">Weer niet beschikbaar</span></div>`}
+  finally{RT_WX.loading=false}
 }
 
 /* ---------- live kaart ---------- */
@@ -579,7 +953,7 @@ function rtMapDraw(fit){
   }
   const planeIco=(deg)=>L.divIcon({className:'',iconSize:[30,30],iconAnchor:[15,15],html:`<div class="rt-mk"><span style="display:grid;transform:rotate(${deg-45}deg)">${rtSvg(RT_PLANE)}</span></div>`});
   const truckIco=L.divIcon({className:'',iconSize:[30,30],iconAnchor:[15,15],html:`<div class="rt-mk road">${rtSvg(RT_TRUCK)}</div>`});
-  const many=(Object.keys(S.activeFlights||{}).length+Object.keys(ets().active||{}).length)>4;
+  const many=(Object.keys(S.activeFlights||{}).length+Object.keys(ets().active||{}).length)>(document.querySelector('.rt5-map')?2:4);
   if(fl)Object.entries(S.activeFlights||{}).forEach(([who,f])=>{
     if(!f||!f.startedAt)return;const pts=rtGC(f.a,f.b,64);if(!pts)return;
     const est=(Number(f.estimatedHours)||0)*3600000,pct=est>0?Math.min(.98,Math.max(.02,(Date.now()-f.startedAt)/est)):.5,idx=Math.max(1,Math.min(pts.length-2,Math.round(pct*(pts.length-1))));
@@ -671,7 +1045,7 @@ function rtAfterRender(){
   }
   if(!label)label=({info:'Handleiding',adm:'Beheer'})[tab]||tab;
   const h=document.createElement('div');h.className='rt-page-head';h.dataset.tab=tab;
-  h.innerHTML=`<nav class="rt-crumb" aria-label="Kruimelpad"><button type="button" onclick="rtGo('hub')">Dashboard</button>${grp?`<span>›</span><span>${esc(grp)}</span>`:''}<span>›</span><b>${esc(label)}</b></nav><h1>${esc(label)}</h1>`;
+  h.innerHTML=`<nav class="rt-crumb" aria-label="Kruimelpad"><button type="button" onclick="rtGo('hub')">Hoofdpagina</button>${grp?`<span>›</span><span>${esc(grp)}</span>`:''}<span>›</span><b>${esc(label)}</b></nav><h1>${esc(label)}</h1>`;
   v.insertBefore(h,v.firstChild);
 }
 
@@ -716,7 +1090,7 @@ const UP={hangar:["Hangar","◆",3e5,2.2,[2,5,9,14,20],l=>HN[l]+" • "+CAP[l]+"
 const AC=[["f","Eerste vlucht","Registreer een vlucht",s=>s.t.n>=1,50],["n10","Op stoom","10 vluchten",s=>s.t.n>=10,100],["n50","Vaste klanten","50 vluchten",s=>s.t.n>=50,300],["n100","Honderd!","100 vluchten",s=>s.t.n>=100,600],["d1","Op reis","1.000 nm gevlogen",s=>s.t.nm>=1e3,100],["d2","Wereldreiziger","10.000 nm gevlogen",s=>s.t.nm>=1e4,500],["m1","Miljonair","1.000.000 verdiend",s=>s.t.e>=1e6,300],["ap","Ontdekkers","10 luchthavens",s=>s.apts.length>=10,150],["pf","Boterzacht","10 perfecte landingen",s=>s.t.perf>=10,200],["tm","Team","3 verschillende werknemers",s=>Object.keys(s.p).length>=3,150],["n250","Vlootcommandant","250 vluchten",s=>s.t.n>=250,800],["n500","Vijfhonderd vluchten","500 vluchten",s=>s.t.n>=500,1500],["n1000","Duizend vluchten","1.000 vluchten",s=>s.t.n>=1000,3000],["d3","Halverwege de wereld","25.000 nm gevlogen",s=>s.t.nm>=25e3,800],["d4","Om de wereld","100.000 nm gevlogen",s=>s.t.nm>=1e5,2500],["m2","Multimiljonair","10.000.000 verdiend",s=>s.t.e>=1e7,800],["m3","Luchtvaartmagnaat","100.000.000 verdiend",s=>s.t.e>=1e8,2500],["ap2","Wereldnetwerk","25 luchthavens",s=>s.apts.length>=25,500],["ap3","Op elk continent","50 luchthavens",s=>s.apts.length>=50,1200],["pf2","Zijden landingen","50 perfecte landingen",s=>s.t.perf>=50,600]];
 const TT=[[1,"Startup"],[5,"Lokaal bedrijf"],[10,"Regionale operator"],[15,"Nationale operator"],[25,"Internationale operator"],[35,"Luchtvaartimperium"]],PT=[[1,"Leerling-werknemer"],[5,"Co-werknemer"],[10,"Kapitein"],[20,"Senior kapitein"],[30,"Chief pilot"],[40,"Legende"]];
 const req=L=>Math.floor(150*(L-1)**1.7),preq=L=>Math.floor(100*(L-1)**1.6);
-const $=s=>document.querySelector(s),E=n=>"$"+Math.round(n).toLocaleString("nl-NL"),esc=s=>String(s).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
+const $=s=>document.querySelector(s),E=n=>(Number(n)<0?"− € ":"€ ")+Math.abs(Math.round(Number(n)||0)).toLocaleString("nl-NL"),esc=s=>String(s).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
 const tt=(L,t)=>t.filter(x=>L>=x[0]).pop()[1];
 function pr(xp,f){let L=1;while(L<50&&xp>=f(L+1))L++;if(L>=50)return{L,pct:100,t:"MAX"};const a=f(L),b=f(L+1);return{L,pct:100*(xp-a)/(b-a),t:Math.floor(xp-a)+" / "+(b-a)+" XP"}}
 function nm(a,b){const A=AP[a],B=AP[b];if(!A||!B)return null;const r=Math.PI/180,p=(B[0]-A[0])*r,l=(B[1]-A[1])*r;return 6880.13*Math.asin(Math.sqrt(Math.sin(p/2)**2+Math.cos(A[0]*r)*Math.cos(B[0]*r)*Math.sin(l/2)**2))}
